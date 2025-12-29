@@ -1,0 +1,8 @@
+Artificial Intelligence (AI) is intelligence demonstrated by machines, in contrast to the natural intelligence displayed by humans and animals. 
+RAG stands for Retrieval-Augmentation Generation. It is a technique used to give LLMs (Large Language Models) access to data they weren't originally trained on.
+Ollama is a platform that allows users to run open-source large language models locally on their machines.
+ChromaDB is an open-source vector database used for storing and retrieving embeddings.
+LangChain is a framework for building applications powered by large language models.
+The capital of France is Paris. The speed of light is 299,792,458 meters per second.
+Quantum computing is a type of computing that uses quantum-mechanical phenomena, such as superposition and entanglement.
+A study assistant RAG application helps students by finding relevant parts of their textbooks to answer questions accurately.

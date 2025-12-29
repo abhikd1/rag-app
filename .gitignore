@@ -1,0 +1,5 @@
+chroma_db/
+rag_app/
+__pycache__/
+*.pyc
+.env
