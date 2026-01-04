@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../.
 
 from typing import List, Optional
 from src.domain.study_modes.base.interface import IStudyMode, ModeResponse
+from src.domain.study_modes.recall.enhanced_recall import EnhancedRecallMode  # NEW: Optimized Mode A
 from src.domain.study_modes.recall.exact_recall import ExactRecallMode
 from src.domain.study_modes.recall.active_recall import ActiveRecallTester
 from src.domain.study_modes.explainer.stuck_point import StuckPointExplainer
@@ -37,12 +38,13 @@ class EnterpriseQueryRouter:
         
         # Initialize all study modes
         self.modes: List[IStudyMode] = [
-            ExactRecallMode(),          # MODE A - Highest priority
+            EnhancedRecallMode(),       # MODE A Enhanced - Dual-layer lossless (NEW)
             StuckPointExplainer(),      # MODE B
             ConceptLinker(),            # MODE C
             OralRevisionTutor(),        # MODE D
             ActiveRecallTester(),       # MODE E
         ]
+
         
         self.logger.info(f"Router initialized with {len(self.modes)} study modes")
     
@@ -94,9 +96,27 @@ class EnterpriseQueryRouter:
                         success=False
                     )
         
-        # Step 3: No mode matched - return None to trigger fallback
-        self.logger.info("No specialized mode matched - returning None for fallback")
-        return None
+        # Step 3: No specialized mode matched - Default to Enhanced Mode A
+        self.logger.info("No specialized mode matched - Defaulting to Enhanced Mode A (General Query)")
+        
+        # Use the first mode (EnhancedRecallMode) as default
+        fallback_mode = self.modes[0] 
+        
+        try:
+            # Prepare context
+            context = {
+                'vector_store': self.vector_store,
+                'llm_client': self.llm_client
+            }
+            return fallback_mode.execute(sanitized_query, context)
+            
+        except Exception as e:
+            self.logger.error(f"Fallback mode execution error: {e}", exc_info=True)
+            return ModeResponse(
+                content=f"❌ Error executing fallback mode: {str(e)}",
+                mode_name="FALLBACK",
+                success=False
+            )
     
     def get_available_modes(self) -> List[str]:
         """Get list of all available mode names"""
