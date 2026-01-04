@@ -1,0 +1,280 @@
+[2026-01-04 12:50:54] [infrastructure.database.vector_store.client] [INFO] Initializing vector store at ./chroma_db
+[2026-01-04 12:50:55] [infrastructure.database.vector_store.client] [INFO] Vector store initialized successfully
+[2026-01-04 12:50:55] [domain.orchestrator.router] [INFO] Router initialized with 5 study modes
+[2026-01-04 12:50:55] [domain.orchestrator.router] [INFO] Routing query: Page 14...
+[2026-01-04 12:50:55] [domain.orchestrator.router] [INFO] Query matched: MODE A: EXACT RECALL
+[2026-01-04 12:50:55] [src.domain.study_modes.recall.exact_recall] [INFO] Executing MODE A for query: Page 14
+[2026-01-04 12:50:57] [infrastructure.database.vector_store.client] [ERROR] Search failed: Error raised by inference API HTTP code: 404, {"error":"model \"nomic-embed-text\" not found, try pulling it first"}
+[2026-01-04 12:50:57] [domain.orchestrator.router] [INFO] Mode execution failed
+[2026-01-04 12:50:57] [domain.orchestrator.router] [INFO] Routing query: What is written on page 20?...
+[2026-01-04 12:50:57] [domain.orchestrator.router] [INFO] Query matched: MODE A: EXACT RECALL
+[2026-01-04 12:50:57] [src.domain.study_modes.recall.exact_recall] [INFO] Executing MODE A for query: What is written on page 20?
+[2026-01-04 12:50:59] [infrastructure.database.vector_store.client] [ERROR] Search failed: Error raised by inference API HTTP code: 404, {"error":"model \"nomic-embed-text\" not found, try pulling it first"}
+[2026-01-04 12:50:59] [domain.orchestrator.router] [INFO] Mode execution failed
+[2026-01-04 12:50:59] [domain.orchestrator.router] [INFO] Routing query: MODE: A Show me page 13...
+[2026-01-04 12:50:59] [domain.orchestrator.router] [INFO] Query matched: MODE A: EXACT RECALL
+[2026-01-04 12:50:59] [src.domain.study_modes.recall.exact_recall] [INFO] Executing MODE A for query: MODE: A Show me page 13
+[2026-01-04 12:51:01] [infrastructure.database.vector_store.client] [ERROR] Search failed: Error raised by inference API HTTP code: 404, {"error":"model \"nomic-embed-text\" not found, try pulling it first"}
+[2026-01-04 12:51:01] [domain.orchestrator.router] [INFO] Mode execution failed
+[2026-01-04 12:51:01] [domain.orchestrator.router] [INFO] Routing query: I am confused about the thought vector...
+[2026-01-04 12:51:01] [domain.orchestrator.router] [INFO] Query matched: MODE B: STUCK-POINT EXPLANATION
+[2026-01-04 12:51:01] [src.domain.study_modes.explainer.stuck_point] [INFO] Executing MODE B for query: I am confused about the thought vector
+[2026-01-04 12:51:03] [infrastructure.database.vector_store.client] [ERROR] Search failed: Error raised by inference API HTTP code: 404, {"error":"model \"nomic-embed-text\" not found, try pulling it first"}
+[2026-01-04 12:51:05] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:51:05] [domain.orchestrator.router] [INFO] Routing query: I don't understand what attention mechanism means...
+[2026-01-04 12:51:05] [domain.orchestrator.router] [INFO] Query matched: MODE B: STUCK-POINT EXPLANATION
+[2026-01-04 12:51:05] [src.domain.study_modes.explainer.stuck_point] [INFO] Executing MODE B for query: I don't understand what attention mechanism means
+[2026-01-04 12:51:07] [infrastructure.database.vector_store.client] [ERROR] Search failed: Error raised by inference API HTTP code: 404, {"error":"model \"nomic-embed-text\" not found, try pulling it first"}
+[2026-01-04 12:51:10] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:51:10] [domain.orchestrator.router] [INFO] Routing query: MODE: B Explain cold fusion...
+[2026-01-04 12:51:10] [domain.orchestrator.router] [INFO] Query matched: MODE B: STUCK-POINT EXPLANATION
+[2026-01-04 12:51:10] [src.domain.study_modes.explainer.stuck_point] [INFO] Executing MODE B for query: MODE: B Explain cold fusion
+[2026-01-04 12:51:12] [infrastructure.database.vector_store.client] [ERROR] Search failed: Error raised by inference API HTTP code: 404, {"error":"model \"nomic-embed-text\" not found, try pulling it first"}
+[2026-01-04 12:51:15] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:51:15] [domain.orchestrator.router] [INFO] Routing query: How does the attention mechanism relate to transformers?...
+[2026-01-04 12:51:15] [domain.orchestrator.router] [INFO] No specialized mode matched - returning None for fallback
+[2026-01-04 12:51:15] [domain.orchestrator.router] [INFO] Routing query: Connect GPT-2 to GPT-3...
+[2026-01-04 12:51:15] [domain.orchestrator.router] [INFO] No specialized mode matched - returning None for fallback
+[2026-01-04 12:51:15] [domain.orchestrator.router] [INFO] Routing query: MODE: C Link prompt engineering to LLM training...
+[2026-01-04 12:51:15] [domain.orchestrator.router] [INFO] Query matched: MODE C: CONCEPT LINKING
+[2026-01-04 12:51:15] [src.domain.study_modes.synthesizer.concept_linker] [INFO] Executing MODE C for query: MODE: C Link prompt engineering to LLM training
+[2026-01-04 12:51:17] [infrastructure.database.vector_store.client] [ERROR] Search failed: Error raised by inference API HTTP code: 404, {"error":"model \"nomic-embed-text\" not found, try pulling it first"}
+[2026-01-04 12:51:20] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:51:20] [domain.orchestrator.router] [INFO] Routing query: Revise Chapter 1...
+[2026-01-04 12:51:20] [domain.orchestrator.router] [INFO] Query matched: MODE D: REVISION / ORAL MODE
+[2026-01-04 12:51:20] [src.domain.study_modes.tutor.oral_revision] [INFO] Executing MODE D for query: Revise Chapter 1
+[2026-01-04 12:51:22] [infrastructure.database.vector_store.client] [ERROR] Search failed: Error raised by inference API HTTP code: 404, {"error":"model \"nomic-embed-text\" not found, try pulling it first"}
+[2026-01-04 12:51:27] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:51:27] [domain.orchestrator.router] [INFO] Routing query: Read the history of GPT models to me...
+[2026-01-04 12:51:27] [domain.orchestrator.router] [INFO] No specialized mode matched - returning None for fallback
+[2026-01-04 12:51:27] [domain.orchestrator.router] [INFO] Routing query: MODE: D Go through the transformer architecture...
+[2026-01-04 12:51:27] [domain.orchestrator.router] [INFO] Query matched: MODE D: REVISION / ORAL MODE
+[2026-01-04 12:51:27] [src.domain.study_modes.tutor.oral_revision] [INFO] Executing MODE D for query: MODE: D Go through the transformer architecture
+[2026-01-04 12:51:29] [infrastructure.database.vector_store.client] [ERROR] Search failed: Error raised by inference API HTTP code: 404, {"error":"model \"nomic-embed-text\" not found, try pulling it first"}
+[2026-01-04 12:51:32] [infrastructure.database.vector_store.client] [INFO] Initializing vector store at ./chroma_db
+[2026-01-04 12:51:35] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:51:35] [domain.orchestrator.router] [INFO] Routing query: Test me on Chapter 1...
+[2026-01-04 12:51:35] [domain.orchestrator.router] [INFO] Query matched: MODE E: ACTIVE RECALL / SELF-TEST
+[2026-01-04 12:51:35] [src.domain.study_modes.recall.active_recall] [INFO] Executing MODE E for query: Test me on Chapter 1
+[2026-01-04 12:51:37] [infrastructure.database.vector_store.client] [ERROR] Search failed: Error raised by inference API HTTP code: 404, {"error":"model \"nomic-embed-text\" not found, try pulling it first"}
+[2026-01-04 12:51:39] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:51:39] [domain.orchestrator.router] [INFO] Routing query: Quiz me on transformers...
+[2026-01-04 12:51:39] [domain.orchestrator.router] [INFO] Query matched: MODE E: ACTIVE RECALL / SELF-TEST
+[2026-01-04 12:51:39] [src.domain.study_modes.recall.active_recall] [INFO] Executing MODE E for query: Quiz me on transformers
+[2026-01-04 12:51:41] [infrastructure.database.vector_store.client] [ERROR] Search failed: Error raised by inference API HTTP code: 404, {"error":"model \"nomic-embed-text\" not found, try pulling it first"}
+[2026-01-04 12:51:42] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:51:42] [domain.orchestrator.router] [INFO] Routing query: MODE: E Ask me about GPT models...
+[2026-01-04 12:51:42] [domain.orchestrator.router] [INFO] Query matched: MODE E: ACTIVE RECALL / SELF-TEST
+[2026-01-04 12:51:42] [src.domain.study_modes.recall.active_recall] [INFO] Executing MODE E for query: MODE: E Ask me about GPT models
+[2026-01-04 12:51:44] [infrastructure.database.vector_store.client] [ERROR] Search failed: Error raised by inference API HTTP code: 404, {"error":"model \"nomic-embed-text\" not found, try pulling it first"}
+[2026-01-04 12:51:45] [infrastructure.database.vector_store.client] [INFO] Vector store initialized successfully
+[2026-01-04 12:51:45] [domain.orchestrator.router] [INFO] Router initialized with 5 study modes
+[2026-01-04 12:51:45] [domain.orchestrator.router] [INFO] Routing query: Page 14...
+[2026-01-04 12:51:45] [domain.orchestrator.router] [INFO] Query matched: MODE A: EXACT RECALL
+[2026-01-04 12:51:45] [src.domain.study_modes.recall.exact_recall] [INFO] Executing MODE A for query: Page 14
+[2026-01-04 12:51:45] [domain.orchestrator.router] [INFO] Mode execution failed
+[2026-01-04 12:51:45] [domain.orchestrator.router] [INFO] Routing query: What is written on page 20?...
+[2026-01-04 12:51:45] [domain.orchestrator.router] [INFO] Query matched: MODE A: EXACT RECALL
+[2026-01-04 12:51:45] [src.domain.study_modes.recall.exact_recall] [INFO] Executing MODE A for query: What is written on page 20?
+[2026-01-04 12:51:45] [domain.orchestrator.router] [INFO] Mode execution failed
+[2026-01-04 12:51:45] [domain.orchestrator.router] [INFO] Routing query: MODE: A Show me page 13...
+[2026-01-04 12:51:45] [domain.orchestrator.router] [INFO] Query matched: MODE A: EXACT RECALL
+[2026-01-04 12:51:45] [src.domain.study_modes.recall.exact_recall] [INFO] Executing MODE A for query: MODE: A Show me page 13
+[2026-01-04 12:51:45] [domain.orchestrator.router] [INFO] Mode execution failed
+[2026-01-04 12:51:45] [domain.orchestrator.router] [INFO] Routing query: I am confused about the thought vector...
+[2026-01-04 12:51:45] [domain.orchestrator.router] [INFO] Query matched: MODE B: STUCK-POINT EXPLANATION
+[2026-01-04 12:51:45] [src.domain.study_modes.explainer.stuck_point] [INFO] Executing MODE B for query: I am confused about the thought vector
+[2026-01-04 12:51:47] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:51:47] [domain.orchestrator.router] [INFO] Routing query: I don't understand what attention mechanism means...
+[2026-01-04 12:51:47] [domain.orchestrator.router] [INFO] Query matched: MODE B: STUCK-POINT EXPLANATION
+[2026-01-04 12:51:47] [src.domain.study_modes.explainer.stuck_point] [INFO] Executing MODE B for query: I don't understand what attention mechanism means
+[2026-01-04 12:51:47] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:51:49] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:51:49] [domain.orchestrator.router] [INFO] Routing query: MODE: B Explain cold fusion...
+[2026-01-04 12:51:49] [domain.orchestrator.router] [INFO] Query matched: MODE B: STUCK-POINT EXPLANATION
+[2026-01-04 12:51:49] [src.domain.study_modes.explainer.stuck_point] [INFO] Executing MODE B for query: MODE: B Explain cold fusion
+[2026-01-04 12:51:52] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:51:52] [domain.orchestrator.router] [INFO] Routing query: How does the attention mechanism relate to transformers?...
+[2026-01-04 12:51:52] [domain.orchestrator.router] [INFO] No specialized mode matched - returning None for fallback
+[2026-01-04 12:51:52] [domain.orchestrator.router] [INFO] Routing query: Connect GPT-2 to GPT-3...
+[2026-01-04 12:51:52] [domain.orchestrator.router] [INFO] No specialized mode matched - returning None for fallback
+[2026-01-04 12:51:52] [domain.orchestrator.router] [INFO] Routing query: MODE: C Link prompt engineering to LLM training...
+[2026-01-04 12:51:52] [domain.orchestrator.router] [INFO] Query matched: MODE C: CONCEPT LINKING
+[2026-01-04 12:51:52] [src.domain.study_modes.synthesizer.concept_linker] [INFO] Executing MODE C for query: MODE: C Link prompt engineering to LLM training
+[2026-01-04 12:51:58] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:51:58] [domain.orchestrator.router] [INFO] Routing query: Revise Chapter 1...
+[2026-01-04 12:51:58] [domain.orchestrator.router] [INFO] Query matched: MODE D: REVISION / ORAL MODE
+[2026-01-04 12:51:58] [src.domain.study_modes.tutor.oral_revision] [INFO] Executing MODE D for query: Revise Chapter 1
+[2026-01-04 12:52:02] [infrastructure.database.vector_store.client] [INFO] Initializing vector store at c:\Users\sumit\rag app\chroma_db
+[2026-01-04 12:52:05] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:52:05] [domain.orchestrator.router] [INFO] Routing query: Read the history of GPT models to me...
+[2026-01-04 12:52:05] [domain.orchestrator.router] [INFO] No specialized mode matched - returning None for fallback
+[2026-01-04 12:52:05] [domain.orchestrator.router] [INFO] Routing query: MODE: D Go through the transformer architecture...
+[2026-01-04 12:52:05] [domain.orchestrator.router] [INFO] Query matched: MODE D: REVISION / ORAL MODE
+[2026-01-04 12:52:05] [src.domain.study_modes.tutor.oral_revision] [INFO] Executing MODE D for query: MODE: D Go through the transformer architecture
+[2026-01-04 12:52:10] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:52:10] [domain.orchestrator.router] [INFO] Routing query: Test me on Chapter 1...
+[2026-01-04 12:52:10] [domain.orchestrator.router] [INFO] Query matched: MODE E: ACTIVE RECALL / SELF-TEST
+[2026-01-04 12:52:10] [src.domain.study_modes.recall.active_recall] [INFO] Executing MODE E for query: Test me on Chapter 1
+[2026-01-04 12:52:13] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:52:13] [domain.orchestrator.router] [INFO] Routing query: Quiz me on transformers...
+[2026-01-04 12:52:13] [domain.orchestrator.router] [INFO] Query matched: MODE E: ACTIVE RECALL / SELF-TEST
+[2026-01-04 12:52:13] [src.domain.study_modes.recall.active_recall] [INFO] Executing MODE E for query: Quiz me on transformers
+[2026-01-04 12:52:13] [infrastructure.database.vector_store.client] [INFO] Vector store initialized successfully
+[2026-01-04 12:52:13] [domain.orchestrator.router] [INFO] Router initialized with 5 study modes
+[2026-01-04 12:52:13] [domain.orchestrator.router] [INFO] Routing query: Page 14...
+[2026-01-04 12:52:13] [domain.orchestrator.router] [INFO] Query matched: MODE A: EXACT RECALL
+[2026-01-04 12:52:13] [src.domain.study_modes.recall.exact_recall] [INFO] Executing MODE A for query: Page 14
+[2026-01-04 12:52:13] [domain.orchestrator.router] [INFO] Mode execution failed
+[2026-01-04 12:52:13] [domain.orchestrator.router] [INFO] Routing query: What is written on page 20?...
+[2026-01-04 12:52:13] [domain.orchestrator.router] [INFO] Query matched: MODE A: EXACT RECALL
+[2026-01-04 12:52:13] [src.domain.study_modes.recall.exact_recall] [INFO] Executing MODE A for query: What is written on page 20?
+[2026-01-04 12:52:13] [domain.orchestrator.router] [INFO] Mode execution failed
+[2026-01-04 12:52:13] [domain.orchestrator.router] [INFO] Routing query: MODE: A Show me page 13...
+[2026-01-04 12:52:13] [domain.orchestrator.router] [INFO] Query matched: MODE A: EXACT RECALL
+[2026-01-04 12:52:13] [src.domain.study_modes.recall.exact_recall] [INFO] Executing MODE A for query: MODE: A Show me page 13
+[2026-01-04 12:52:13] [domain.orchestrator.router] [INFO] Mode execution failed
+[2026-01-04 12:52:13] [domain.orchestrator.router] [INFO] Routing query: I am confused about the thought vector...
+[2026-01-04 12:52:13] [domain.orchestrator.router] [INFO] Query matched: MODE B: STUCK-POINT EXPLANATION
+[2026-01-04 12:52:13] [src.domain.study_modes.explainer.stuck_point] [INFO] Executing MODE B for query: I am confused about the thought vector
+[2026-01-04 12:52:14] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:52:14] [domain.orchestrator.router] [INFO] Routing query: MODE: E Ask me about GPT models...
+[2026-01-04 12:52:14] [domain.orchestrator.router] [INFO] Query matched: MODE E: ACTIVE RECALL / SELF-TEST
+[2026-01-04 12:52:14] [src.domain.study_modes.recall.active_recall] [INFO] Executing MODE E for query: MODE: E Ask me about GPT models
+[2026-01-04 12:52:15] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:52:15] [domain.orchestrator.router] [INFO] Routing query: I don't understand what attention mechanism means...
+[2026-01-04 12:52:15] [domain.orchestrator.router] [INFO] Query matched: MODE B: STUCK-POINT EXPLANATION
+[2026-01-04 12:52:15] [src.domain.study_modes.explainer.stuck_point] [INFO] Executing MODE B for query: I don't understand what attention mechanism means
+[2026-01-04 12:52:17] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:52:18] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:52:18] [domain.orchestrator.router] [INFO] Routing query: MODE: B Explain cold fusion...
+[2026-01-04 12:52:18] [domain.orchestrator.router] [INFO] Query matched: MODE B: STUCK-POINT EXPLANATION
+[2026-01-04 12:52:18] [src.domain.study_modes.explainer.stuck_point] [INFO] Executing MODE B for query: MODE: B Explain cold fusion
+[2026-01-04 12:52:20] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:52:20] [domain.orchestrator.router] [INFO] Routing query: How does the attention mechanism relate to transformers?...
+[2026-01-04 12:52:20] [domain.orchestrator.router] [INFO] No specialized mode matched - returning None for fallback
+[2026-01-04 12:52:20] [domain.orchestrator.router] [INFO] Routing query: Connect GPT-2 to GPT-3...
+[2026-01-04 12:52:20] [domain.orchestrator.router] [INFO] No specialized mode matched - returning None for fallback
+[2026-01-04 12:52:20] [domain.orchestrator.router] [INFO] Routing query: MODE: C Link prompt engineering to LLM training...
+[2026-01-04 12:52:20] [domain.orchestrator.router] [INFO] Query matched: MODE C: CONCEPT LINKING
+[2026-01-04 12:52:20] [src.domain.study_modes.synthesizer.concept_linker] [INFO] Executing MODE C for query: MODE: C Link prompt engineering to LLM training
+[2026-01-04 12:52:22] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:52:22] [domain.orchestrator.router] [INFO] Routing query: Revise Chapter 1...
+[2026-01-04 12:52:22] [domain.orchestrator.router] [INFO] Query matched: MODE D: REVISION / ORAL MODE
+[2026-01-04 12:52:22] [src.domain.study_modes.tutor.oral_revision] [INFO] Executing MODE D for query: Revise Chapter 1
+[2026-01-04 12:52:27] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:52:27] [domain.orchestrator.router] [INFO] Routing query: Read the history of GPT models to me...
+[2026-01-04 12:52:27] [domain.orchestrator.router] [INFO] No specialized mode matched - returning None for fallback
+[2026-01-04 12:52:27] [domain.orchestrator.router] [INFO] Routing query: MODE: D Go through the transformer architecture...
+[2026-01-04 12:52:27] [domain.orchestrator.router] [INFO] Query matched: MODE D: REVISION / ORAL MODE
+[2026-01-04 12:52:27] [src.domain.study_modes.tutor.oral_revision] [INFO] Executing MODE D for query: MODE: D Go through the transformer architecture
+[2026-01-04 12:52:33] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:52:33] [domain.orchestrator.router] [INFO] Routing query: Test me on Chapter 1...
+[2026-01-04 12:52:33] [domain.orchestrator.router] [INFO] Query matched: MODE E: ACTIVE RECALL / SELF-TEST
+[2026-01-04 12:52:33] [src.domain.study_modes.recall.active_recall] [INFO] Executing MODE E for query: Test me on Chapter 1
+[2026-01-04 12:52:35] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:52:35] [domain.orchestrator.router] [INFO] Routing query: Quiz me on transformers...
+[2026-01-04 12:52:35] [domain.orchestrator.router] [INFO] Query matched: MODE E: ACTIVE RECALL / SELF-TEST
+[2026-01-04 12:52:35] [src.domain.study_modes.recall.active_recall] [INFO] Executing MODE E for query: Quiz me on transformers
+[2026-01-04 12:52:36] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 12:52:36] [domain.orchestrator.router] [INFO] Routing query: MODE: E Ask me about GPT models...
+[2026-01-04 12:52:36] [domain.orchestrator.router] [INFO] Query matched: MODE E: ACTIVE RECALL / SELF-TEST
+[2026-01-04 12:52:36] [src.domain.study_modes.recall.active_recall] [INFO] Executing MODE E for query: MODE: E Ask me about GPT models
+[2026-01-04 12:52:39] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 13:02:34] [interface.cli.app] [INFO] Initializing Enterprise Study System...
+[2026-01-04 13:02:34] [src.infrastructure.database.vector_store.client] [INFO] Initializing vector store at c:\Users\sumit\rag app\chroma_db
+[2026-01-04 13:02:44] [src.infrastructure.database.vector_store.client] [INFO] Vector store initialized successfully
+[2026-01-04 13:02:44] [src.domain.orchestrator.router] [INFO] Router initialized with 5 study modes
+[2026-01-04 13:02:44] [interface.cli.app] [INFO] System initialized successfully
+[2026-01-04 13:03:44] [infrastructure.database.vector_store.client] [INFO] Initializing vector store at c:\Users\sumit\rag app\chroma_db
+[2026-01-04 13:03:54] [infrastructure.database.vector_store.client] [INFO] Vector store initialized successfully
+[2026-01-04 13:03:54] [domain.orchestrator.router] [INFO] Router initialized with 5 study modes
+[2026-01-04 13:03:54] [domain.orchestrator.router] [INFO] Routing query: Page 14...
+[2026-01-04 13:03:54] [domain.orchestrator.router] [INFO] Query matched: MODE A: EXACT RECALL
+[2026-01-04 13:03:54] [src.domain.study_modes.recall.exact_recall] [INFO] Executing MODE A for query: Page 14
+[2026-01-04 13:03:54] [domain.orchestrator.router] [INFO] Mode execution failed
+[2026-01-04 13:03:54] [domain.orchestrator.router] [INFO] Routing query: What is written on page 20?...
+[2026-01-04 13:03:54] [domain.orchestrator.router] [INFO] Query matched: MODE A: EXACT RECALL
+[2026-01-04 13:03:54] [src.domain.study_modes.recall.exact_recall] [INFO] Executing MODE A for query: What is written on page 20?
+[2026-01-04 13:03:54] [domain.orchestrator.router] [INFO] Mode execution failed
+[2026-01-04 13:03:54] [domain.orchestrator.router] [INFO] Routing query: MODE: A Show me page 13...
+[2026-01-04 13:03:54] [domain.orchestrator.router] [INFO] Query matched: MODE A: EXACT RECALL
+[2026-01-04 13:03:54] [src.domain.study_modes.recall.exact_recall] [INFO] Executing MODE A for query: MODE: A Show me page 13
+[2026-01-04 13:03:54] [domain.orchestrator.router] [INFO] Mode execution failed
+[2026-01-04 13:03:54] [domain.orchestrator.router] [INFO] Routing query: I am confused about the thought vector...
+[2026-01-04 13:03:54] [domain.orchestrator.router] [INFO] Query matched: MODE B: STUCK-POINT EXPLANATION
+[2026-01-04 13:03:54] [src.domain.study_modes.explainer.stuck_point] [INFO] Executing MODE B for query: I am confused about the thought vector
+[2026-01-04 13:03:58] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 13:03:58] [domain.orchestrator.router] [INFO] Routing query: I don't understand what attention mechanism means...
+[2026-01-04 13:03:58] [domain.orchestrator.router] [INFO] Query matched: MODE B: STUCK-POINT EXPLANATION
+[2026-01-04 13:03:58] [src.domain.study_modes.explainer.stuck_point] [INFO] Executing MODE B for query: I don't understand what attention mechanism means
+[2026-01-04 13:04:01] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 13:04:01] [domain.orchestrator.router] [INFO] Routing query: MODE: B Explain cold fusion...
+[2026-01-04 13:04:01] [domain.orchestrator.router] [INFO] Query matched: MODE B: STUCK-POINT EXPLANATION
+[2026-01-04 13:04:01] [src.domain.study_modes.explainer.stuck_point] [INFO] Executing MODE B for query: MODE: B Explain cold fusion
+[2026-01-04 13:04:05] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 13:04:05] [domain.orchestrator.router] [INFO] Routing query: How does the attention mechanism relate to transformers?...
+[2026-01-04 13:04:05] [domain.orchestrator.router] [INFO] No specialized mode matched - returning None for fallback
+[2026-01-04 13:04:05] [domain.orchestrator.router] [INFO] Routing query: Connect GPT-2 to GPT-3...
+[2026-01-04 13:04:05] [domain.orchestrator.router] [INFO] No specialized mode matched - returning None for fallback
+[2026-01-04 13:04:05] [domain.orchestrator.router] [INFO] Routing query: MODE: C Link prompt engineering to LLM training...
+[2026-01-04 13:04:05] [domain.orchestrator.router] [INFO] Query matched: MODE C: CONCEPT LINKING
+[2026-01-04 13:04:05] [src.domain.study_modes.synthesizer.concept_linker] [INFO] Executing MODE C for query: MODE: C Link prompt engineering to LLM training
+[2026-01-04 13:04:10] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 13:04:10] [domain.orchestrator.router] [INFO] Routing query: Revise Chapter 1...
+[2026-01-04 13:04:10] [domain.orchestrator.router] [INFO] Query matched: MODE D: REVISION / ORAL MODE
+[2026-01-04 13:04:10] [src.domain.study_modes.tutor.oral_revision] [INFO] Executing MODE D for query: Revise Chapter 1
+[2026-01-04 13:04:14] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 13:04:14] [domain.orchestrator.router] [INFO] Routing query: Read the history of GPT models to me...
+[2026-01-04 13:04:14] [domain.orchestrator.router] [INFO] No specialized mode matched - returning None for fallback
+[2026-01-04 13:04:14] [domain.orchestrator.router] [INFO] Routing query: MODE: D Go through the transformer architecture...
+[2026-01-04 13:04:14] [domain.orchestrator.router] [INFO] Query matched: MODE D: REVISION / ORAL MODE
+[2026-01-04 13:04:14] [src.domain.study_modes.tutor.oral_revision] [INFO] Executing MODE D for query: MODE: D Go through the transformer architecture
+[2026-01-04 13:04:19] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 13:04:19] [domain.orchestrator.router] [INFO] Routing query: Test me on Chapter 1...
+[2026-01-04 13:04:19] [domain.orchestrator.router] [INFO] Query matched: MODE E: ACTIVE RECALL / SELF-TEST
+[2026-01-04 13:04:19] [src.domain.study_modes.recall.active_recall] [INFO] Executing MODE E for query: Test me on Chapter 1
+[2026-01-04 13:04:21] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 13:04:21] [domain.orchestrator.router] [INFO] Routing query: Quiz me on transformers...
+[2026-01-04 13:04:21] [domain.orchestrator.router] [INFO] Query matched: MODE E: ACTIVE RECALL / SELF-TEST
+[2026-01-04 13:04:21] [src.domain.study_modes.recall.active_recall] [INFO] Executing MODE E for query: Quiz me on transformers
+[2026-01-04 13:04:23] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 13:04:23] [domain.orchestrator.router] [INFO] Routing query: MODE: E Ask me about GPT models...
+[2026-01-04 13:04:23] [domain.orchestrator.router] [INFO] Query matched: MODE E: ACTIVE RECALL / SELF-TEST
+[2026-01-04 13:04:23] [src.domain.study_modes.recall.active_recall] [INFO] Executing MODE E for query: MODE: E Ask me about GPT models
+[2026-01-04 13:04:25] [domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 13:16:05] [infrastructure.database.vector_store.client] [INFO] Initializing vector store at c:\Users\sumit\rag app\chroma_db
+[2026-01-04 13:16:16] [infrastructure.database.vector_store.client] [INFO] Vector store initialized successfully
+[2026-01-04 13:16:16] [infrastructure.database.vector_store.client] [INFO] Adding 1 documents to vector store
+[2026-01-04 13:16:16] [infrastructure.database.vector_store.client] [INFO] Documents added successfully
+[2026-01-04 13:16:42] [infrastructure.database.vector_store.client] [INFO] Initializing vector store at c:\Users\sumit\rag app\chroma_db
+[2026-01-04 13:16:53] [infrastructure.database.vector_store.client] [INFO] Vector store initialized successfully
+[2026-01-04 13:16:53] [infrastructure.database.vector_store.client] [INFO] Adding 20 documents to vector store
+[2026-01-04 13:16:53] [infrastructure.database.vector_store.client] [INFO] Documents added successfully
+[2026-01-04 13:17:43] [src.infrastructure.database.vector_store.client] [INFO] Initializing vector store at c:\Users\sumit\rag app\chroma_db
+[2026-01-04 13:17:53] [src.infrastructure.database.vector_store.client] [INFO] Vector store initialized successfully
+[2026-01-04 13:17:53] [src.domain.orchestrator.router] [INFO] Router initialized with 5 study modes
+[2026-01-04 13:17:53] [src.domain.orchestrator.router] [INFO] Routing query: MODE A: Page 2...
+[2026-01-04 13:17:53] [src.domain.orchestrator.router] [INFO] Query matched: MODE A: EXACT RECALL
+[2026-01-04 13:17:53] [src.domain.study_modes.recall.exact_recall] [INFO] Executing MODE A for query: MODE A: Page 2
+[2026-01-04 13:17:53] [src.domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 13:17:53] [src.domain.orchestrator.router] [INFO] Routing query: I don't understand the difference between text and binary files...
+[2026-01-04 13:17:53] [src.domain.orchestrator.router] [INFO] Query matched: MODE B: STUCK-POINT EXPLANATION
+[2026-01-04 13:17:53] [src.domain.study_modes.explainer.stuck_point] [INFO] Executing MODE B for query: I don't understand the difference between text and binary files
+[2026-01-04 13:17:56] [src.domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 13:17:56] [src.domain.orchestrator.router] [INFO] Routing query: How does the open() function relate to file access modes in Python?...
+[2026-01-04 13:17:56] [src.domain.orchestrator.router] [INFO] No specialized mode matched - returning None for fallback
+[2026-01-04 13:20:01] [src.infrastructure.database.vector_store.client] [INFO] Initializing vector store at c:\Users\sumit\rag app\chroma_db
+[2026-01-04 13:20:11] [src.infrastructure.database.vector_store.client] [INFO] Vector store initialized successfully
+[2026-01-04 13:20:11] [src.domain.orchestrator.router] [INFO] Router initialized with 5 study modes
+[2026-01-04 13:20:11] [src.domain.orchestrator.router] [INFO] Routing query: Page 2...
+[2026-01-04 13:20:11] [src.domain.orchestrator.router] [INFO] Query matched: MODE A: EXACT RECALL
+[2026-01-04 13:20:11] [src.domain.study_modes.recall.exact_recall] [INFO] Executing MODE A for query: Page 2
+[2026-01-04 13:20:12] [src.domain.orchestrator.router] [INFO] Mode execution succeeded
+[2026-01-04 13:20:22] [src.infrastructure.database.vector_store.client] [INFO] Initializing vector store at c:\Users\sumit\rag app\chroma_db
+[2026-01-04 13:20:32] [src.infrastructure.database.vector_store.client] [INFO] Vector store initialized successfully
+[2026-01-04 13:20:32] [src.domain.orchestrator.router] [INFO] Router initialized with 5 study modes
+[2026-01-04 13:20:32] [src.domain.orchestrator.router] [INFO] Routing query: Page 2...
+[2026-01-04 13:20:32] [src.domain.orchestrator.router] [INFO] Query matched: MODE A: EXACT RECALL
+[2026-01-04 13:20:32] [src.domain.study_modes.recall.exact_recall] [INFO] Executing MODE A for query: Page 2
+[2026-01-04 13:20:32] [src.domain.orchestrator.router] [INFO] Mode execution succeeded

@@ -26,6 +26,7 @@ class FreeDocumentQA:
             persist_directory=persist_directory,
             embedding_function=self.embeddings
         )
+        self.last_topic = ""  # Track the last topic discussed
         print("[INFO] RAG System Ready!")
 
     def load_documents_from_folder(self, folder_path="./documents"):
@@ -63,9 +64,34 @@ class FreeDocumentQA:
         return True
 
     def ask_question(self, question):
+        """Ask a question and get an answer based on your documents"""
         try:
+            # ============================================================
+            # ORCHESTRATION LAYER DELEGATION
+            # ============================================================
+            # Initialize router if not already done (Lazy Load)
+            if not hasattr(self, 'router'):
+                from query_router import QueryRouter
+                self.router = QueryRouter(self.vector_store)
+
+            # Delegate to Router
+            response, handled = self.router.route_and_execute(question)
+            if handled:
+                return response
+            # ============================================================
+            
+            # DEFAULT FALLBACK: STANDARD CONVERSATIONAL RAG
+            # Detect conversational keywords
+            nav_keywords = ['yes', 'next', 'continue', 'tell me more', 'go on', 'more']
+            is_nav = question.lower().strip().rstrip('.') in nav_keywords
+            
+            search_query = question
+            if is_nav and self.last_topic:
+                # If user says "next", search for the "next topic after [last_topic]"
+                search_query = f"What is the next section or concept after {self.last_topic} in the documents?"
+            
             # Search for more chunks (k=5) to get better context
-            relevant_docs = self.vector_store.similarity_search(question, k=5)
+            relevant_docs = self.vector_store.similarity_search(search_query, k=5)
             
             if not relevant_docs:
                 return "❌ No relevant documents found. Please load documents first."
@@ -84,13 +110,16 @@ class FreeDocumentQA:
 CONTEXT FROM USER DOCUMENTS:
 {context}
 
-QUESTION: {question}
+USER INPUT: {question}
+PREVIOUS TOPIC DISCUSSED: {self.last_topic}
 
 STRICT RED-LINE RULES:
 1. Only use facts from the context above.
-2. If the context contains multiple conflicting values, prioritize the one from '.txt' files.
-3. If you can't find the answer, say "I cannot find this in your documents."
+2. If the user input is "yes", "next", or "continue", provide the next logical concept or section from the context.
+3. If you can't find the answer or next part, say "I cannot find this in your documents."
 4. Mention the source file name in your answer (e.g., "According to [file.txt]...").
+5. Keep explanations simple and encouraging.
+6. Formatting: Use a readable format with clear headings, bullet points, and relevant emojis (like 📚, ✍️, ✅) to make the content easy to study quickly—just like ChatGPT.
 
 ANSWER:"""
             
@@ -101,14 +130,23 @@ ANSWER:"""
                 options={'temperature': 0} # 0 temperature for maximum accuracy
             )
             
-            return response['response']
+            full_response = response['response']
+            
+            # Try to extract a topic name for next time
+            if ":" in full_response[:50]:
+                self.last_topic = full_response.split(":")[0].replace("**", "").strip()
+            elif "next" in question.lower() or not self.last_topic:
+                self.last_topic = full_response[:30].strip()
+            
+            return full_response
             
         except Exception as e:
             return f"[ERROR] {str(e)}"
 
     def interactive_chat(self):
-        print("\n--- STUDY ASSISTANT STARTED ---")
+        print("\n--- INTERACTIVE STUDY ASSISTANT STARTED ---")
         print("Type 'quit' to exit or 'reload' to update documents.")
+        print("Tip: You can now say 'next' or 'yes' to move through the document!")
         while True:
             query = input("\n[YOU]: ").strip()
             if query.lower() in ['quit', 'exit']: break
@@ -124,7 +162,10 @@ ANSWER:"""
 if __name__ == "__main__":
     qa = FreeDocumentQA()
     # If the database is empty, load documents
-    if len(qa.vector_store.get()['ids']) == 0:
+    try:
+        if len(qa.vector_store.get()['ids']) == 0:
+            qa.load_documents_from_folder()
+    except:
         qa.load_documents_from_folder()
     
     qa.interactive_chat()

@@ -1,0 +1,59 @@
+# UNIVERSAL STUDY SYSTEM — USER GUIDE
+
+## 🌟 SYSTEM ARCHITECTURE
+This system uses a **Router-based architecture** to handle different study modes.
+The `QueryRouter` analyzes your intent and dispatches tasks to 5 specialized handlers.
+
+---
+
+## 📋 AVAILABLE MODES
+
+### 📄 MODE A: EXACT RECALL (Lossless Retrieval)
+**Trigger:** `Page 14`, `What is written on...`, `MODE: A`
+**Function:** Returns exact, word-for-word text from specific pages. No summaries.
+
+### 🧩 MODE B: STUCK-POINT EXPLANATION (Surgical Tutor)
+**Trigger:** `I am confused about...`, `Explain this part...`, `MODE: B`
+**Function:** Explains *only* the specific concept you are stuck on, using book context.
+
+### 🔗 MODE C: CONCEPT LINKING (Synthesizer)
+**Trigger:** `How does X relate to Y?`, `Connect this to earlier parts`, `MODE: C`
+**Function:** Finds relationships between the current concept and other chapters.
+
+### 🗣️ MODE D: REVISION / ORAL MODE (Narrator)
+**Trigger:** `Revise Chapter 1`, `Read this to me`, `MODE: D`
+**Function:** Generates a smooth, sequential script meant to be read aloud for revision.
+
+### 🧠 MODE E: ACTIVE RECALL (Professor)
+**Trigger:** `Test me on Chapter 2`, `Quiz me`, `MODE: E`
+**Function:** Generates 3 tiered questions (Basic, Intermediate, Advanced) to test you.
+
+---
+
+## 🚀 HOW TO USE
+
+1. **Start the App:**
+   ```powershell
+   python main.py
+   ```
+
+2. **Load Documents:**
+   Type `reload` to index your PDFs/Textbooks.
+
+3. **Just Ask:**
+   The router automatically detects your intent. You don't *have* to type "MODE: X", but you can if you want explicit control.
+
+   *   *"What is on page 25?"* -> **Auto-routes to Mode A**
+   *   *"Test me on transformers"* -> **Auto-routes to Mode E**
+   *   *"I don't understand the attention mechanism"* -> **Auto-routes to Mode B**
+
+---
+
+## 🛠️ TECHNICAL STACK (Refactored)
+
+*   `main.py`: **Interface Layer** (CLI & Input loop)
+*   `query_router.py`: **Orchestration Layer** (Route logic)
+*   `mode_*.py`: **Service Layer** (Individual business logic for A-E)
+*   `extractor.py`: **Data Ingestion Layer** (Processed PDF -> Text/Index)
+
+This modular design allows for "Plug-and-Play" additions of new modes without breaking the core system.

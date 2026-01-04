@@ -1,0 +1,260 @@
+================================================================================
+📑 BOOK INDEX — HEADINGS & PAGE MAPPING
+Source: prompt-engineering-for-llms-the-art-and-science-of-building-large-language-modelbased-applications-9781098156152 (1).pdf
+Total Headings Detected: 203
+================================================================================
+
+  → LSI (Page 4)
+  → TIP (Page 8)
+  → NOTE (Page 8)
+  → WARNING (Page 8)
+  → NOTE (Page 8)
+
+================================================================================
+📖 Part I. Foundations
+================================================================================
+
+================================================================================
+📖 Chapter 1. Introduction to Prompt
+================================================================================
+  → 1. Tokens from the source language are sent to the encoder one at a time (Page 20)
+  → 2. The internal state is packaged up as the thought vector and sent to the (Page 20)
+  → 3. A special “start” token is sent to the decoder, indicating that this is the (Page 20)
+  → 4. Conditioned upon the value of the thought vector, the decoder state is (Page 20)
+  → 5. The output token is provided as the next input into the decoder. At this (Page 20)
+  → 6. Finally, the decoder emits a special “end” token, indicating that the (Page 20)
+  → GPT-1 (Page 25)
+  → GPT-2 (Page 25)
+  → GPT-3 (Page 25)
+  → GB), (Page 25)
+  → GPT-3.5 (Page 26)
+  → GPT-4 (Page 26)
+  → FLOP (Page 26)
+
+================================================================================
+📖 Chapter 2. Understanding LLMs
+================================================================================
+  → WHAT IS FINE-TUNING? (Page 31)
+  → TIP (Page 33)
+  → 2. Thursday. (Page 33)
+  → 1. This is why I chose to settle down with a book tonight. (Page 34)
+  → 2. Shall we watch the game at your place instead? (Page 34)
+  → TIP (Page 37)
+  → TIP (Page 40)
+  → NOTE (Page 45)
+  → 1. Each minibrain has some things it wants to know, so it submits a couple (Page 58)
+  → 2. Each minibrain has some things it can share, so it submits a couple of (Page 58)
+  → 3. Now, every question is matched up with its best-fitting answer. “Who is (Page 58)
+  → 4. The best-fitting answer to each question is revealed to the minibrain that (Page 58)
+  → NOTE (Page 58)
+  → TIP (Page 61)
+
+================================================================================
+📖 Chapter 3. Moving to Chat
+================================================================================
+  → 570 GB.) (Page 67)
+  → AI: (Page 74)
+  → TIP (Page 80)
+  → NOW, YOU TRY! (Page 82)
+  → LLM (Page 87)
+  → NOW, YOU TRY! (Page 87)
+
+================================================================================
+📖 Chapter 4. Designing LLM
+================================================================================
+
+================================================================================
+📖 Chapter 2 showed in detail how LLMs function, and we demonstrated that at the
+================================================================================
+  → 1. We will discuss the user’s problem domain, convert that problem to the model (Page 91)
+  → 1. The prompt must closely resemble content from the training set. (Page 93)
+  → 2. The prompt must include all the information relevant to addressing the (Page 93)
+  → 3. The prompt must lead the model to generate a completion that addresses (Page 93)
+  → 4. The completion must have a reasonable end point so that generation (Page 93)
+  → TIP (Page 94)
+  → SO A FUNNY THING HAPPENED... (Page 95)
+  → NOW, YOU TRY! (Page 99)
+  → 1. What if you leave off ## Solution 2 or even the question that (Page 99)
+  → 2. Problem 1 serves as an example. If you change the solution 1 text, (Page 99)
+  → 3. Try keeping the same country but replacing the negative context (Page 99)
+  → 4. If you omit the stop word, then does the model confabulate a third (Page 99)
+  → 5. Are there any reasons that using a homework problem might be (Page 99)
+
+================================================================================
+📖 Part II. Core Techniques
+================================================================================
+
+================================================================================
+📖 Chapter 5. Prompt Content
+================================================================================
+  → TIP (Page 119)
+  → TIP (Page 121)
+  → TIP (Page 124)
+  → TIP (Page 126)
+  → WARNING (Page 130)
+  → 1. Anything the application has directly at its fingertips, like anything to (Page 135)
+  → 2. What the application has saved somewhere (e.g., the user’s profile info) (Page 135)
+  → 3. Information the application could record for itself, even if it doesn’t yet (Page 135)
+  → 4. Information the application could obtain by using public APIs (e.g., the (Page 135)
+  → 5. Information the application could obtain by asking the user directly or (Page 135)
+  → 1. Things that are always the same for the same user (e.g., profile (Page 136)
+  → 2. Things that change slowly over time (e.g., purchase histories) (Page 136)
+  → 3. More ephemeral things (e.g., time, states of the user’s interaction with (Page 136)
+  → TIP (Page 139)
+  → 1. Split up the documents into smaller snippets. (Page 142)
+  → 2. Convert all of the snippets into embedding vectors, using the process (Page 142)
+  → 3. Insert the snippets and their corresponding vectors into a vector (Page 142)
+  → 1. Make sure that the number of tokens is less than the maximum number (Page 143)
+  → 2. Ideally, make sure that the text chunk is large enough to hold one and (Page 143)
+  → 3. Make sure the snippet is an appropriate size for placement in the (Page 143)
+  → TIP (Page 154)
+  → N/A (Page 156)
+
+================================================================================
+📖 Chapter 6. Assembling the
+================================================================================
+  → TIP (Page 167)
+  → 1. For chain-of-thought prompting or managing overly verbose models, (Page 169)
+  → 2. You can easily signal when the model’s response should end by adding (Page 169)
+  → 1. You could use what we call elastic prompt elements, which are prompt (Page 180)
+  → 2. Alternatively, you could create multiple prompt elements from the (Page 180)
+
+================================================================================
+📖 Chapter 7. Taming the Model
+================================================================================
+
+================================================================================
+📖 Chapter 8 will center on making good use of reasoning preambles as well.
+================================================================================
+  → A YAML (Page 192)
+  → A JSON (Page 192)
+  → TIP (Page 194)
+  → TIP (Page 195)
+  → WARNING (Page 196)
+  → 1. Only allow your application to show corrections if it is confident. (Page 197)
+  → 2. Include warnings when the model struggles more than usual. (Page 197)
+  → 3. Incorporate more context or retry when the model struggles. (Page 197)
+  → 4. Switch to a more intelligent (and expensive) LLM for better results. (Page 197)
+  → 5. Only interrupt the user with assistance if the certainty that it is (Page 197)
+  → TIP (Page 197)
+  → TIP (Page 200)
+  → WARNING (Page 202)
+  → TIP (Page 202)
+  → TIP (Page 206)
+  → TIP (Page 206)
+  → 1. Try to make your prompt look like the beginning of one of the (Page 211)
+  → 2. Be very sure not to have it look like one of the original documents (Page 211)
+
+================================================================================
+📖 Part III. An Expert of the Craft
+================================================================================
+
+================================================================================
+📖 Chapter 8. Conversational
+================================================================================
+  → 1. Who should speak? The OpenAI API, rather than the model, inserts (Page 223)
+  → 2. Should a tool be called? The next tokens, to=functions., are (Page 223)
+  → 3. Which tool should be called? The next tokens the model generates (Page 223)
+  → 4. Which argument should be specified? The next text generated from the (Page 223)
+  → 5. What value will the argument have? The model next predicts the value (Page 224)
+  → 6. Are we done? Once all the arguments have been specified, the model (Page 224)
+  → NOW, YOU TRY! (Page 224)
+  → 1. Whatever is easier for a human to understand is also easier for an LLM (Page 226)
+  → 2. The best results are derived by patterning prompts after training data (Page 226)
+  → 1. When the desired value is known in the application, remove the (Page 227)
+  → 2. Instruct the model to ask if it’s unsure about an argument—and then (Page 228)
+  → "JL5441"}}}]} (Page 238)
+  → NOW, YOU TRY! (Page 245)
+
+================================================================================
+📖 Chapter 9. LLM Workflows
+================================================================================
+  → 1. Generate a list of popular Shopify storefronts and retrieve their website (Page 252)
+  → 2. For each storefront, extract details—product offering, branding, style, (Page 252)
+  → 3. Review each storefront and come up with a plug-in that would benefit (Page 252)
+  → 4. Generate marketing emails advertising the plug-in concept to each (Page 252)
+  → 5. Send the emails. (Page 252)
+  → 1. Define goal. Identify the purpose of the workflow. What is the desired (Page 257)
+  → 2. Specify tasks. Break the workflow down into a set of tasks that, when (Page 257)
+  → 3. Implement tasks. Build the tasks as specified. Make sure input and (Page 257)
+  → 4. Implement workflow. Connect the tasks into a complete workflow. If (Page 257)
+  → 5. Optimize workflow. Optimize tasks to improve quality, performance, (Page 257)
+  → 1. Generate a list of popular Shopify storefronts and retrieve their website (Page 258)
+  → 2. For each storefront, extract details—product offering, branding, style, (Page 258)
+  → 3. Review each storefront and come up with a plug-in that would benefit (Page 258)
+  → 4. Generate marketing emails advertising the plug-in concept to each (Page 258)
+  → 5. Send the emails. (Page 258)
+  → 1. What do they sell? (Page 270)
+  → 2. What is the overall tone of the website? Fun? Serious? Relaxing? (Page 270)
+  → 3. What values do they hold most dear? Sustainability? Social causes? (Page 270)
+  → 4. What themes are present on the website? Travel? Productivity? Exercise? (Page 270)
+  → 5. Is there anything praiseworthy on the website? (We’re getting ready to (Page 270)
+  → 6. Is there anything else that seems noteworthy? (Page 270)
+  → SUBJECT: IGNITE YOUR CULINARY ADVENTURE WITH (Page 271)
+  → OUR RECIPE INTEGRATION PLUG-IN (Page 271)
+  → NOW, YOU TRY! (Page 277)
+
+================================================================================
+📖 Chapter 10. Evaluating LLM
+================================================================================
+  → TIP (Page 281)
+  → 1. Where do you get the example problems? (Page 284)
+  → 2. How do you assess your app’s solutions to those problems? (Page 284)
+  → 1. Take an open source repository, and from it, take one code file, and (Page 287)
+  → 2. Remove the body of that function, imagining that the user was just (Page 287)
+  → 3. Ask GitHub Copilot what to type next. (Page 287)
+  → TIP (Page 290)
+  → WARNING (Page 294)
+  → TIP (Page 296)
+  → WARNING (Page 297)
+  → 1. This action would do nothing to address the user's problem or might even (Page 297)
+  → 2. This action might address a small part of the problem but leave the main (Page 297)
+  → 3. This action has a good chance of addressing a substantial part of the problem. (Page 298)
+  → 4. This action is not guaranteed to work completely, but it should solve most of (Page 298)
+  → 5. This action will definitely solve the problem completely. (Page 298)
+  → TIP (Page 300)
+  → 1. Direct feedback: what does the user say to the suggestion? (Page 301)
+  → 2. Functional correctness: does the suggestion work? (Page 301)
+  → 3. User acceptance: does the user follow the suggestion? (Page 301)
+  → 4. Achieved impact: how much does the user benefit? (Page 301)
+  → 5. Incidental metrics: what are the measurements “around” the suggestion? (Page 301)
+  → TIP (Page 303)
+
+================================================================================
+📖 Chapter 11. Looking Ahead
+================================================================================
+  → 2022. This ignited an explosion of development around LLMs. Many companies (Page 306)
+
+================================================================================
+📖 Chapter 2). Multimodality can naively be extended to video input—all you have
+================================================================================
+  → 40. In this section, we’ll focus on a new element of the conversation that has (Page 308)
+  → 1. LLMs are nothing more than text completion engines that mimic the (Page 312)
+  → 2. You should empathize with the LLM and understand how it thinks. (Page 312)
+  → A (Page 315)
+  → B (Page 319)
+  → C (Page 321)
+  → D (Page 325)
+  → E (Page 327)
+  → F (Page 329)
+  → G (Page 330)
+  → H (Page 331)
+  → I (Page 332)
+  → J (Page 333)
+  → JSON (Page 333)
+  → K (Page 334)
+  → L (Page 334)
+  → M (Page 338)
+  → N (Page 340)
+  → O (Page 340)
+  → P (Page 342)
+  → Q (Page 346)
+  → R (Page 346)
+  → S (Page 349)
+  → T (Page 352)
+  → U (Page 356)
+  → V (Page 356)
+  → W (Page 356)
+  → X (Page 357)
+  → Y (Page 357)
+  → Z (Page 357)
