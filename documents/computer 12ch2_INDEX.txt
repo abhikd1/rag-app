@@ -1,0 +1,24 @@
+================================================================================
+📑 BOOK INDEX — HEADINGS & PAGE MAPPING
+Source: computer 12ch2.pdf
+Total Headings Detected: 18
+================================================================================
+
+  → C (Page 1)
+  → FILE HANDLING IN PYTHON (Page 11)
+  → 2.7 CREATING AND TRAVERSING A TEXT FILE (Page 11)
+  → WRITING DATA IN THE FILE (Page 13)
+  → READING DATA FROM THE FILE (Page 13)
+  → WORKING WITH BINARY FILES (Page 17)
+  → TOTAL SALARY :  37000 (Page 17)
+  → TOTAL SALARY :  43550 (Page 17)
+  → 1.	 Differentiate between: (Page 19)
+  → 2.	 Write the use and syntax for the following methods: (Page 19)
+  → 3.	 Write the file mode that will be used for opening the (Page 19)
+  → 4.	 Why is it advised to close a file after we are done with (Page 19)
+  → 5.	 What is the difference between the following set of (Page 19)
+  → 6.	 Write a command(s) to write the following lines to the (Page 19)
+  → 7.	 Write a Python program to open the file hello.txt used in (Page 20)
+  → 8.	 Write a program to accept string/sentences from the (Page 20)
+  → 9.	 Define pickling in Python. Explain serialization and (Page 20)
+  → 10.	 Write a program to enter the following records in a binary (Page 20)

@@ -14,12 +14,19 @@ if sys.platform == 'win32':
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 
+from rich.console import Console
+from rich.markdown import Markdown
+from rich.panel import Panel
+from rich.prompt import Prompt
+from rich.text import Text
+
 from src.domain.orchestrator.router import EnterpriseQueryRouter
 from src.infrastructure.database.vector_store.client import VectorStoreClient
 from src.infrastructure.llm.client.ollama_client import LLMClient
 from src.core.logging.logger import LoggerFactory
 from src.core.config.settings import config
 
+console = Console()
 
 class StudySystemCLI:
     """
@@ -32,6 +39,8 @@ class StudySystemCLI:
         
         # Initialize infrastructure
         self.logger.info("Initializing Enterprise Study System...")
+        console.rule("[bold cyan]Initializing Enterprise Study System[/bold cyan]")
+        
         self.vector_store = VectorStoreClient()
         self.llm_client = LLMClient()
         
@@ -45,28 +54,22 @@ class StudySystemCLI:
     
     def print_welcome(self):
         """Print welcome message"""
-        welcome = """
-{'='*80}
-📚 ENTERPRISE STUDY SYSTEM
-{'='*80}
+        welcome_text = """
+# 📚 ENTERPRISE STUDY SYSTEM  
+### *Advanced RAG For Specialized Learning*
 
-Available Modes:
-  📄 MODE A: Exact Recall (Page-specific retrieval)
-  🧩 MODE B: Stuck-Point Explanation (Surgical clarification)
-  🔗 MODE C: Concept Linking (Cross-chapter connections)
-  🗣️ MODE D: Oral Revision (Voice-friendly scripts)
-  🧠 MODE E: Active Recall (Self-testing)
+**Available Modes:**
+- 📄 **MODE A: Exact Recall** (Page-specific retrieval)
+- 🧩 **MODE B: Stuck-Point Explanation** (Surgical clarification)
+- 🔗 **MODE C: Concept Linking** (Cross-chapter connections)
+- 🗣️ **MODE D: Oral Revision** (Voice-friendly scripts)
+- 🧠 **MODE E: Active Recall** (Self-testing)
 
-Commands:
-  - Type your question naturally (mode auto-detected)
-  - Type 'MODE: X' to force a specific mode
-  - Type 'reload' to re-index documents
-  - Type 'modes' to see available modes
-  - Type 'quit' or 'exit' to close
-
-{'='*80}
+**Quick Commands:**
+- Type your question naturally (Auto-detected).
+- `quit` or `exit` to close.
 """
-        print(welcome)
+        console.print(Panel(Markdown(welcome_text), border_style="cyan", title="Welcome"))
     
     def run(self):
         """Main interactive loop"""
@@ -75,47 +78,40 @@ Commands:
         while True:
             try:
                 # Get user input
-                query = input("\n[YOU]: ").strip()
+                query = Prompt.ask("\n[bold green]YOU[/bold green]")
                 
                 # Handle special commands
                 if query.lower() in ['quit', 'exit']:
-                    print("\n👋 Goodbye! Happy studying!")
+                    console.print("\n[bold yellow]👋 Goodbye! Happy studying![/bold yellow]")
                     break
                 
                 if query.lower() == 'modes':
                     modes = self.router.get_available_modes()
-                    print("\n📋 Available Modes:")
+                    console.print("\n[bold cyan]📋 Available Modes:[/bold cyan]")
                     for mode in modes:
-                        print(f"  • {mode}")
-                    continue
-                
-                if query.lower() == 'reload':
-                    print("\n🔄 Reloading documents...")
-                    # TODO: Implement document reloading
-                    print("✅ Documents reloaded")
+                        console.print(f"  • {mode}")
                     continue
                 
                 if not query:
                     continue
                 
                 # Route query
-                print("\n[THINKING]...", end="\r")
-                response = self.router.route(query)
+                with console.status("[bold cyan]Thinking...[/bold cyan]", spinner="dots"):
+                    response = self.router.route(query)
                 
                 # Display response
                 if response:
-                    print(f"\n{response.content}")
+                    console.print("\n")
+                    console.print(Panel(Markdown(response.content), title="🤖 AI Assistant", border_style="purple"))
                 else:
-                    # Fallback to standard RAG (not implemented in this version)
-                    print("\n💬 Standard chat mode not yet implemented.")
-                    print("Please use one of the specialized modes (A-E).")
+                    console.print("[bold red]Standard chat mode not yet implemented. Please try a specific query.[/bold red]")
                 
             except KeyboardInterrupt:
-                print("\n\n👋 Interrupted. Goodbye!")
+                console.print("\n\n[bold yellow]👋 Interrupted. Goodbye![/bold yellow]")
                 break
             except Exception as e:
                 self.logger.error(f"Error in main loop: {e}", exc_info=True)
-                print(f"\n❌ Error: {str(e)}")
+                console.print(f"\n[bold red]❌ Error: {str(e)}[/bold red]")
 
 
 def main():

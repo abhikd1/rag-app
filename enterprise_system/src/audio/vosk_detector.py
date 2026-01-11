@@ -114,8 +114,9 @@ class VoskInterruptDetector:
                         result = json.loads(self.recognizer.Result())
                         text = result.get('text', '').strip()
                         
-                        # Only interrupt for significant speech (filter noise)
-                        if text and len(text) > 2 and self.interrupt_callback:
+                        # Only interrupt for significant speech (filter noise/echo)
+                        # Increased threshold to prevent self-interruption from TTS echo
+                        if text and len(text) > 4 and self.interrupt_callback:
                             self.logger.info(f"🛑 Interrupt detected: '{text}'")
                             self.interrupt_callback(text)
                     

@@ -69,7 +69,8 @@ class VectorStoreClient:
     def similarity_search(
         self, 
         query: str, 
-        k: Optional[int] = None
+        k: Optional[int] = None,
+        filter: Optional[dict] = None
     ) -> List[Document]:
         """
         Search for similar documents.
@@ -77,6 +78,7 @@ class VectorStoreClient:
         Args:
             query: Search query
             k: Number of results to return (defaults to config value)
+            filter: Metadata filter dictionary
             
         Returns:
             List of similar documents
@@ -85,14 +87,60 @@ class VectorStoreClient:
             k = config.vector_store.similarity_top_k
         
         try:
-            self.logger.debug(f"Searching for: '{query}' (k={k})")
-            results = self._store.similarity_search(query, k=k)
+            self.logger.debug(f"Searching for: '{query}' (k={k}, filter={filter})")
+            results = self._store.similarity_search(query, k=k, filter=filter)
             self.logger.debug(f"Found {len(results)} results")
             return results
         except Exception as e:
             self.logger.error(f"Search failed: {e}")
             return []
     
+    def extract_sequential_range(self, file_path: str, start_time: str, end_time: str) -> str:
+        """
+        100% LOSSLESS extraction from raw file. 
+        Bypasses vector search to ensure NOT A SINGLE LINE is missed.
+        """
+        if not os.path.exists(file_path):
+            self.logger.error(f"File not found: {file_path}")
+            return ""
+
+        extracted_lines = []
+        is_capturing = False
+        
+        # Helper to convert "MM:SS" to seconds
+        def time_to_sec(t):
+            try:
+                parts = t.split(':')
+                if len(parts) == 2:
+                    return int(parts[0]) * 60 + int(parts[1])
+                return 0
+            except: return 0
+
+        target_start = time_to_sec(start_time)
+        target_end = time_to_sec(end_time)
+
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                for line in f:
+                    # Detect timestamp in line (e.g., "10:15 - " or "[10:15]")
+                    import re
+                    match = re.search(r'(\d{1,2}:\d{2})', line)
+                    if match:
+                        current_time = time_to_sec(match.group(1))
+                        if current_time >= target_start:
+                            is_capturing = True
+                        if current_time > target_end:
+                            is_capturing = False
+                            break
+                    
+                    if is_capturing:
+                        extracted_lines.append(line.strip())
+            
+            return "\n".join(extracted_lines)
+        except Exception as e:
+            self.logger.error(f"Sequential extraction failed: {e}")
+            return ""
+
     def clear(self) -> bool:
         """Clear all documents from the vector store"""
         try:

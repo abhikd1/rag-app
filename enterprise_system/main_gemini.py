@@ -7,6 +7,12 @@ import sys
 import os
 import argparse
 
+# Force UTF-8 encoding for Windows Terminal to handle emojis
+if sys.platform == "win32":
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '.')))
 
 from src.core.config.settings import config
@@ -15,6 +21,7 @@ from src.infrastructure.database.vector_store.client import VectorStoreClient
 from src.infrastructure.llm.client.ollama_client import LLMClient
 from src.domain.orchestrator.router import EnterpriseQueryRouter
 from src.audio.gemini_controller import GeminiAudioController
+from src.audio.turbo_booster import TurboBooster
 
 
 class GeminiRAGApp:
@@ -42,6 +49,7 @@ class GeminiRAGApp:
             
             # Gemini-style audio controller
             self.audio = GeminiAudioController()
+            self.turbo = TurboBooster(self.audio)
             
             self.logger.info("✓ System ready!")
             print("✓ System ready!")
@@ -71,8 +79,8 @@ class GeminiRAGApp:
         
         while True:
             try:
-                # Listen for query (Whisper)
-                user_input = self.audio.listen("Ready to listen...")
+                # Listen for query (Whisper) or use Turbo Auto-Continuation
+                user_input = self.turbo.process_and_listen(getattr(self.audio, 'last_response', ""))
                 
                 if not user_input:
                     continue

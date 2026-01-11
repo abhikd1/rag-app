@@ -1,0 +1,15 @@
+[2026-01-09 03:19:00] [__main__] [INFO] Initializing Enterprise Study System...
+[2026-01-09 03:19:00] [src.infrastructure.database.vector_store.client] [INFO] Initializing vector store at c:\Users\sumit\rag app\chroma_db
+[2026-01-09 03:19:39] [src.infrastructure.database.vector_store.client] [INFO] Vector store initialized successfully
+[2026-01-09 03:19:39] [src.domain.orchestrator.router] [INFO] Router initialized with 5 study modes
+[2026-01-09 03:19:39] [__main__] [INFO] System initialized successfully
+[2026-01-09 03:23:55] [__main__] [INFO] Initializing Enterprise Study System...
+[2026-01-09 03:23:55] [src.infrastructure.database.vector_store.client] [INFO] Initializing vector store at c:\Users\sumit\rag app\chroma_db
+[2026-01-09 03:24:06] [src.infrastructure.database.vector_store.client] [INFO] Vector store initialized successfully
+[2026-01-09 03:24:06] [src.domain.orchestrator.router] [INFO] Router initialized with 5 study modes
+[2026-01-09 03:24:06] [__main__] [INFO] System initialized successfully
+[2026-01-09 03:26:53] [__main__] [INFO] Initializing Enterprise Study System...
+[2026-01-09 03:26:53] [src.infrastructure.database.vector_store.client] [INFO] Initializing vector store at c:\Users\sumit\rag app\chroma_db
+[2026-01-09 03:27:04] [src.infrastructure.database.vector_store.client] [INFO] Vector store initialized successfully
+[2026-01-09 03:27:04] [src.domain.orchestrator.router] [INFO] Router initialized with 5 study modes
+[2026-01-09 03:27:04] [__main__] [INFO] System initialized successfully

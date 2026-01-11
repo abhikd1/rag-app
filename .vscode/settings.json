@@ -1,0 +1,8 @@
+{
+    "markdown.preview.fontFamily": "Söhne, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    "markdown.preview.fontSize": 16,
+    "markdown.preview.lineHeight": 1.7,
+    "markdown.preview.scrollEditorWithPreview": true,
+    "editor.wordWrap": "on",
+    "workbench.editor.enablePreview": false
+}

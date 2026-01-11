@@ -1,0 +1,5 @@
+[2026-01-09 03:19:57] [__main__] [INFO] Initializing Enterprise Study System...
+[2026-01-09 03:19:57] [src.infrastructure.database.vector_store.client] [INFO] Initializing vector store at c:\Users\sumit\rag app\chroma_db
+[2026-01-09 03:20:08] [src.infrastructure.database.vector_store.client] [INFO] Vector store initialized successfully
+[2026-01-09 03:20:08] [src.domain.orchestrator.router] [INFO] Router initialized with 5 study modes
+[2026-01-09 03:20:08] [__main__] [INFO] System initialized successfully

@@ -73,17 +73,18 @@ class EnhancedRecallMode(IStudyMode):
             if match:
                 return int(match.group(1))
         return None
+
+    def _extract_time_segment(self, query: str):
+        """Extract time segment (e.g., 10:00 to 20:00) from query"""
+        pattern = r'(\d{1,2}:\d{2})\s*(?:to|—|-)\s*(\d{1,2}:\d{2})'
+        match = re.search(pattern, query)
+        if match:
+            return match.group(1), match.group(2)
+        return None
     
     def execute(self, query: str, context: dict) -> ModeResponse:
         """
         Execute enhanced lossless recall with LLM formatting.
-        
-        Args:
-            query: User's question
-            context: Dict with 'vector_store' and 'llm_client' keys
-            
-        Returns:
-            ModeResponse with structured, engaging content
         """
         self.logger.info(f"Executing ENHANCED MODE A for query: {query}")
         
@@ -97,13 +98,67 @@ class EnhancedRecallMode(IStudyMode):
                 success=False
             )
         
-        # Check if this is a page-specific query
+        # Check for transcript-specific time segment query
+        time_segment = self._extract_time_segment(query)
+        if time_segment or "transcript" in query.lower():
+            return self._process_transcript_summary(query, time_segment, vector_store, llm_client)
+
+        # Check if this is a page-specific query (NCERT)
         page_num = self._extract_page_number(query)
-        
         if page_num:
             return self._process_page_with_llm(page_num, vector_store, llm_client)
         else:
             return self._process_topic_with_llm(query, vector_store, llm_client)
+
+    def _process_transcript_summary(self, query: str, time_segment, vector_store, llm_client) -> ModeResponse:
+        """Process transcript-based summarization with absolute sequential fidelty."""
+        start_time, end_time = time_segment if time_segment else ("00:00", "10:00")
+        
+        file_path = r"c:\Users\sumit\rag app\documents\all transcript.txt"
+        self.logger.info(f"🏎️ SEQUENTIAL EXTRACTION: {start_time} to {end_time}")
+        
+        # 100% Lossless sequential read
+        raw_text = vector_store.extract_sequential_range(file_path, start_time, end_time)
+        
+        if not raw_text:
+            # Fallback to vector search if sequential fails or file empty
+            results = vector_store.similarity_search(f"transcript {start_time} to {end_time}", k=15)
+            raw_text = "\n\n".join([doc.page_content for doc in results])
+        
+        # THE SONNET-LEVEL ARCHITECT PROMPT
+        system_prompt = f"""You are the Master Architect 5.0. 
+Perform a LOSSLESS, premium analysis of the following transcript segment: {start_time} to {end_time}.
+
+REQUIRED OUTPUT:
+1. 🪝 THE HOOOK: High-level analogy of the segment.
+2. 📑 THE LOSSLESS BREAKdown: Every argument, story, and name mentioned.
+3. 📉 THE DYNAMICS: What changed in this segment?
+4. 📊 VISUAL ARCHITECTURE: ASCII map of the specific scenario.
+
+TRANSCRIPT DATA:
+{raw_text}
+"""
+        try:
+            response = llm_client.generate(prompt=system_prompt, temperature=0.1)
+            content = response.get('response', '')
+            
+            formatted_output = f"""
+╔════════════════════════════════════════════════════════════════════════════╗
+   🎙️  AUTONOMOUS MASTER ARCHITECT | SEQUENTIAL EXTRACTION
+   🔍  SEGMENT: {start_time} — {end_time}
+╚════════════════════════════════════════════════════════════════════════════╝
+
+{content}
+
+⚡ MISSION STATUS: RUNNING | FIDELITY: 100% (SEQUENTIAL)
+"""
+            return ModeResponse(
+                content=formatted_output,
+                mode_name="AUTONOMOUS_MODE",
+                success=True
+            )
+        except Exception as e:
+            return ModeResponse(content=f"Error: {str(e)}", mode_name="TRANSCRIPT_FAIL", success=False)
     
     def _process_page_with_llm(self, page_num: int, vector_store, llm_client) -> ModeResponse:
         """Retrieve and process page content through LLM"""

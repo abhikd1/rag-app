@@ -64,7 +64,7 @@ class FreeDocumentQA:
         return True
 
     def ask_question(self, question):
-        """Ask a question and get an answer based on your documents"""
+        """Ask a question using the 2-step Reasoning (Llama 3) + Formatting (Phi-3) pipeline"""
         try:
             # ============================================================
             # ORCHESTRATION LAYER DELEGATION
@@ -76,8 +76,13 @@ class FreeDocumentQA:
 
             # Delegate to Router
             response, handled = self.router.route_and_execute(question)
-            if handled:
+            
+            # If router handled it BUT failed to find the specific page (returned a warning), 
+            # fallback to the smart Llama 3 search which might find it via context.
+            if handled and "⚠️" not in response:
                 return response
+            elif handled:
+                print(f"[INFO] Router failed to find precise match ('{response.strip()}'). Falling back to Llama 3 Reasoning...")
             # ============================================================
             
             # DEFAULT FALLBACK: STANDARD CONVERSATIONAL RAG
@@ -104,41 +109,68 @@ class FreeDocumentQA:
             
             context = "\n\n".join(context_list)
             
-            # Create a more structured prompt
-            prompt = f"""You are a precise study assistant. Your goal is to answer questions based ONLY on the provided context.
+            # ---------------------------------------------------------
+            # STEP 1: REASONING ENGINE (Llama 3.1 8B)
+            # ---------------------------------------------------------
+            print("[AI] Thinking with Llama 3.1...", end="\r")
+            reasoning_prompt = f"""You are a precise reasoning assistant. 
+Your goal is to answer the user's question based ONLY on the provided context.
 
-CONTEXT FROM USER DOCUMENTS:
+CONTEXT:
 {context}
 
 USER INPUT: {question}
-PREVIOUS TOPIC DISCUSSED: {self.last_topic}
+PREVIOUS TOPIC: {self.last_topic}
 
-STRICT RED-LINE RULES:
-1. Only use facts from the context above.
-2. If the user input is "yes", "next", or "continue", provide the next logical concept or section from the context.
-3. If you can't find the answer or next part, say "I cannot find this in your documents."
-4. Mention the source file name in your answer (e.g., "According to [file.txt]...").
-5. Keep explanations simple and encouraging.
-6. Formatting: Use a readable format with clear headings, bullet points, and relevant emojis (like 📚, ✍️, ✅) to make the content easy to study quickly—just like ChatGPT.
+INSTRUCTIONS:
+1. Use only the provided context.
+2. Explain step by step.
+3. Be factual and structured.
+4. If you can't find the answer, say "I cannot find this in your documents."
+5. If the user asks for "next", find the logical next concept.
 
 ANSWER:"""
-            
-            # Use the cloud model to save local memory
-            response = ollama.generate(
-                model='gpt-oss:120b-cloud', 
-                prompt=prompt,
-                options={'temperature': 0} # 0 temperature for maximum accuracy
+
+            reasoning_response_obj = ollama.generate(
+                model='llama3.1', 
+                prompt=reasoning_prompt,
+                options={'temperature': 0.1} # Low temp for facts
             )
+            raw_answer = reasoning_response_obj['response']
+
+            # ---------------------------------------------------------
+            # STEP 2: FORMATTING ENGINE (Phi-3 Mini)
+            # ---------------------------------------------------------
+            print("[AI] Formatting with Phi-3...    ", end="\r")
+            formatting_prompt = f"""Rewrite the following answer to make it extremely readable and engaging.
             
-            full_response = response['response']
+RULES:
+- Use a friendly, ChatGPT-like tone.
+- Use short paragraphs.
+- Use bullet points where helpful.
+- Add light emojis (1–2 per section, e.g. 📚, 💡, ✅).
+- Do NOT add new information not present in the text below.
+- Keep the meaning exactly the same.
+
+ORIGINAL TEXT:
+{raw_answer}
+
+REWRITTEN ANSWER:"""
+
+            formatting_response_obj = ollama.generate(
+                model='phi3:mini', 
+                prompt=formatting_prompt,
+                options={'temperature': 0.3} # Slight creativity for style
+            )
+            final_response = formatting_response_obj['response']
             
-            # Try to extract a topic name for next time
-            if ":" in full_response[:50]:
-                self.last_topic = full_response.split(":")[0].replace("**", "").strip()
+            # Try to extract a topic name for next time from the RAW answer (it's usually more structured)
+            if ":" in raw_answer[:50]:
+                self.last_topic = raw_answer.split(":")[0].replace("**", "").strip()
             elif "next" in question.lower() or not self.last_topic:
-                self.last_topic = full_response[:30].strip()
+                self.last_topic = raw_answer[:50].split('\n')[0].strip()
             
-            return full_response
+            return final_response
             
         except Exception as e:
             return f"[ERROR] {str(e)}"
@@ -168,4 +200,12 @@ if __name__ == "__main__":
     except:
         qa.load_documents_from_folder()
     
-    qa.interactive_chat()
+    
+    # Check for command line arguments for direct query
+    if len(sys.argv) > 1:
+        query = " ".join(sys.argv[1:])
+        print(f"\n[QUERY]: {query}")
+        response = qa.ask_question(query)
+        print(f"\n[AI RESULT]:\n{response}")
+    else:
+        qa.interactive_chat()
