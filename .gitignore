@@ -3,3 +3,13 @@ rag_app/
 __pycache__/
 *.pyc
 .env
+documents/
+*.txt
+*.pdf
+logs/
+evaluation_outputs/
+groq_output.txt
+groq_output_part2.txt
+groq_meta_response.txt
+debug_answer.txt
+output.txt
