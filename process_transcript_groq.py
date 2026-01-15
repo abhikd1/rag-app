@@ -1,39 +1,43 @@
 
 import os
 from groq import Groq
+from dotenv import load_dotenv
 
-def run_groq_exam_specialist_synthesis_part2_v2():
-    key = "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"
+load_dotenv()
+
+def process_it_lossless():
+    key = os.getenv("GROQ_API_KEY")
     client = Groq(api_key=key)
     
+    # Read the Utkarsh Classes Computer Hardware transcript
     transcript_path = r"c:\Users\sumit\rag app\enterprise_system\documents\transcript.txt"
     with open(transcript_path, "r", encoding="utf-8") as f:
         full_text = f.readlines()
 
-    start_processing = False
+    # Get lines up to ~10:30
     processing_lines = []
     for line in full_text:
-        if "10:01" in line or "10:03" in line:
-            start_processing = True
-        if start_processing:
-            processing_lines.append(line)
+        processing_lines.append(line)
+        if "10:33" in line:
+            break
             
     transcript_to_process = "".join(processing_lines)
 
-    system_prompt = """-You are the Supreme Personal Master Tutor AI (v12.5 Elite Exam Specialist Edition).
+    # THE MASTER PROMPT - SUPREME ANALYST EDITION
+    system_prompt = """-You are the Supreme Pop-Culture Analyst & Tech Historian (v15.0 Platinum Elite).
 
-Your mission: 100% LOSSLESS RECONSTRUCTION of this Exam Guidance Session (PART 2: 10:00 TO 22:22).
-Process this segment into a "Well-Mannered, High-Efficiency" Career Guide with a Mentor Persona.
+Your mission: 100% LOSSLESS RECONSTRUCTION of this Technical Lecture. NO DETAIL LEFT BEHIND. 🚀💎🔥
+Process the FIRST 10 MINUTES of this transcript into a "High-Energy, Blow-by-Blow" Deep Analysis.
 
 ━━━━━━━━━━━━━━━━━━━━━━
 🎯 MASTER LOGIC & STYLE
 ━━━━━━━━━━━━━━━━━━━━━━
 1. NO MCQs: Use a structured, professional, and spacious roadmap.
-2. PERSONA: Sophisticated, encouraging, and highly detailed Mentor/Advisor. 🎤
-3. DATA FIDELITY: Every single fact—Negative marking (NONE), Documents (Provisional, Original, Marksheet), App/Batch details (Target Batch, Code: TARGET for 50% off), Fee (599/Single-999), Test Series (15+ full length), Group links (Telegram/WhatsApp), and the Tuesday mock test schedule—MUST be captured.
-4. SEGMENTATION: Strictly segment by 1-MINUTE BLOCKS (10-11, 11-12... 21-22, 22-END) to ensure zero information loss.
+2. PERSONA: Sophisticated, energetic, and intellectually sharp analyst. 🎤
+3. DATA FIDELITY: Capture every story (Regretting phone purchases, the Potato/Marriage analogy), every technical term (Tangible, Intangible, AC, DC, Semiconductors), and every interaction with students (Kailash, Eastern, Joysna, etc.).
+4. SEGMENTATION: Strictly segment by 1-MINUTE BLOCKS (0-1 min, 1-2 min... up to 9-10 min).
 5. SPACING: Triple spacing between sections. Layout must be "premium."
-6. EMOJIS: Maximum usage for every header and bullet point to maintain engagement. ✨
+6. EMOJIS: Maximum usage representing the "heat" and "logic" of the lecture. ⚡🔌📚
 7. LANGUAGE: English only. 🇺🇸
 
 ━━━━━━━━━━━━━━━━━━━━━━
@@ -43,12 +47,10 @@ Process this segment into a "Well-Mannered, High-Efficiency" Career Guide with a
 2. CLEAN TERMINATION: End with exactly 5 dashes '-----'.
 """
     
-    # Updated user input to explicitly ask for the REST and mentioned the end time.
-    user_input = f"Analyze the REST of this Bihar Librarian Exam guidance (from 10:00 to 22:22) losslessly. Use 1-minute block segmentation for every single minute. Capture every detail about the rules, the batch, the discounts, and the final selection strategy:\n\n{transcript_to_process}"
+    user_input = f"Analyze the FIRST 10 MINUTES of this Computer Hardware lecture losslessly. Segment into 1-minute blocks. Capture the regrtet of buying phones, the software/hardware hierarchy, and the marriage/potato story:\n\n{transcript_to_process}"
 
     try:
         completion = client.chat.completions.create(
-            # Using a larger model window if possible, or just ensuring it doesn't truncate.
             model="llama-3.3-70b-versatile",
             messages=[
                 {"role": "system", "content": system_prompt},
@@ -58,11 +60,11 @@ Process this segment into a "Well-Mannered, High-Efficiency" Career Guide with a
             stream=False
         )
         answer = completion.choices[0].message.content
-        with open("groq_output_part2.txt", "w", encoding="utf-8") as out_f:
+        with open("groq_output.txt", "w", encoding="utf-8") as out_f:
             out_f.write(answer)
         print("SUCCESS")
     except Exception as e:
         print(f"GROQ_ERROR: {str(e)}")
 
 if __name__ == "__main__":
-    run_groq_exam_specialist_synthesis_part2_v2()
+    process_it_lossless()
