@@ -26,6 +26,7 @@ class FreeDocumentQA:
             persist_directory=persist_directory,
             embedding_function=self.embeddings
         )
+        self.last_topic = ""  # Track the last topic discussed
         print("[INFO] RAG System Ready!")
 
     def load_documents_from_folder(self, folder_path="./documents"):
@@ -63,9 +64,39 @@ class FreeDocumentQA:
         return True
 
     def ask_question(self, question):
+        """Ask a question using the 2-step Reasoning (Llama 3) + Formatting (Phi-3) pipeline"""
         try:
+            # ============================================================
+            # ORCHESTRATION LAYER DELEGATION
+            # ============================================================
+            # Initialize router if not already done (Lazy Load)
+            if not hasattr(self, 'router'):
+                from query_router import QueryRouter
+                self.router = QueryRouter(self.vector_store)
+
+            # Delegate to Router
+            response, handled = self.router.route_and_execute(question)
+            
+            # If router handled it BUT failed to find the specific page (returned a warning), 
+            # fallback to the smart Llama 3 search which might find it via context.
+            if handled and "⚠️" not in response:
+                return response
+            elif handled:
+                print(f"[INFO] Router failed to find precise match ('{response.strip()}'). Falling back to Llama 3 Reasoning...")
+            # ============================================================
+            
+            # DEFAULT FALLBACK: STANDARD CONVERSATIONAL RAG
+            # Detect conversational keywords
+            nav_keywords = ['yes', 'next', 'continue', 'tell me more', 'go on', 'more']
+            is_nav = question.lower().strip().rstrip('.') in nav_keywords
+            
+            search_query = question
+            if is_nav and self.last_topic:
+                # If user says "next", search for the "next topic after [last_topic]"
+                search_query = f"What is the next section or concept after {self.last_topic} in the documents?"
+            
             # Search for more chunks (k=5) to get better context
-            relevant_docs = self.vector_store.similarity_search(question, k=5)
+            relevant_docs = self.vector_store.similarity_search(search_query, k=5)
             
             if not relevant_docs:
                 return "❌ No relevant documents found. Please load documents first."
@@ -78,37 +109,76 @@ class FreeDocumentQA:
             
             context = "\n\n".join(context_list)
             
-            # Create a more structured prompt
-            prompt = f"""You are a precise study assistant. Your goal is to answer questions based ONLY on the provided context.
+            # ---------------------------------------------------------
+            # STEP 1: REASONING ENGINE (Llama 3.1 8B)
+            # ---------------------------------------------------------
+            print("[AI] Thinking with Llama 3.1...", end="\r")
+            reasoning_prompt = f"""You are a precise reasoning assistant. 
+Your goal is to answer the user's question based ONLY on the provided context.
 
-CONTEXT FROM USER DOCUMENTS:
+CONTEXT:
 {context}
 
-QUESTION: {question}
+USER INPUT: {question}
+PREVIOUS TOPIC: {self.last_topic}
 
-STRICT RED-LINE RULES:
-1. Only use facts from the context above.
-2. If the context contains multiple conflicting values, prioritize the one from '.txt' files.
-3. If you can't find the answer, say "I cannot find this in your documents."
-4. Mention the source file name in your answer (e.g., "According to [file.txt]...").
+INSTRUCTIONS:
+1. Use only the provided context.
+2. Explain step by step.
+3. Be factual and structured.
+4. If you can't find the answer, say "I cannot find this in your documents."
+5. If the user asks for "next", find the logical next concept.
 
 ANSWER:"""
-            
-            # Use the cloud model to save local memory
-            response = ollama.generate(
-                model='gpt-oss:120b-cloud', 
-                prompt=prompt,
-                options={'temperature': 0} # 0 temperature for maximum accuracy
+
+            reasoning_response_obj = ollama.generate(
+                model='llama3.1', 
+                prompt=reasoning_prompt,
+                options={'temperature': 0.1} # Low temp for facts
             )
+            raw_answer = reasoning_response_obj['response']
+
+            # ---------------------------------------------------------
+            # STEP 2: FORMATTING ENGINE (Phi-3 Mini)
+            # ---------------------------------------------------------
+            print("[AI] Formatting with Phi-3...    ", end="\r")
+            formatting_prompt = f"""Rewrite the following answer to make it extremely readable and engaging.
             
-            return response['response']
+RULES:
+- Use a friendly, ChatGPT-like tone.
+- Use short paragraphs.
+- Use bullet points where helpful.
+- Add light emojis (1–2 per section, e.g. 📚, 💡, ✅).
+- Do NOT add new information not present in the text below.
+- Keep the meaning exactly the same.
+
+ORIGINAL TEXT:
+{raw_answer}
+
+REWRITTEN ANSWER:"""
+
+            formatting_response_obj = ollama.generate(
+                model='phi3:mini', 
+                prompt=formatting_prompt,
+                options={'temperature': 0.3} # Slight creativity for style
+            )
+            final_response = formatting_response_obj['response']
+            
+            # Try to extract a topic name for next time from the RAW answer (it's usually more structured)
+            if ":" in raw_answer[:50]:
+                self.last_topic = raw_answer.split(":")[0].replace("**", "").strip()
+            elif "next" in question.lower() or not self.last_topic:
+                self.last_topic = raw_answer[:50].split('\n')[0].strip()
+            
+            return final_response
             
         except Exception as e:
             return f"[ERROR] {str(e)}"
 
     def interactive_chat(self):
-        print("\n--- STUDY ASSISTANT STARTED ---")
+        print("\n--- INTERACTIVE STUDY ASSISTANT STARTED ---")
         print("Type 'quit' to exit or 'reload' to update documents.")
+        print("Tip: You can now say 'next' or 'yes' to move through the document!")
         while True:
             query = input("\n[YOU]: ").strip()
             if query.lower() in ['quit', 'exit']: break
@@ -124,7 +194,18 @@ ANSWER:"""
 if __name__ == "__main__":
     qa = FreeDocumentQA()
     # If the database is empty, load documents
-    if len(qa.vector_store.get()['ids']) == 0:
+    try:
+        if len(qa.vector_store.get()['ids']) == 0:
+            qa.load_documents_from_folder()
+    except:
         qa.load_documents_from_folder()
     
-    qa.interactive_chat()
+    
+    # Check for command line arguments for direct query
+    if len(sys.argv) > 1:
+        query = " ".join(sys.argv[1:])
+        print(f"\n[QUERY]: {query}")
+        response = qa.ask_question(query)
+        print(f"\n[AI RESULT]:\n{response}")
+    else:
+        qa.interactive_chat()

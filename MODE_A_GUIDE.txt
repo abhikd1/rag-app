@@ -1,0 +1,143 @@
+# MODE A: EXACT RECALL — USER GUIDE
+
+## ✅ PHASE 1 COMPLETE!
+
+MODE A (Exact Recall) is now integrated into your RAG app.
+
+---
+
+## 📋 HOW TO USE MODE A
+
+### Step 1: Load the New Files
+```powershell
+cd "c:\Users\sumit\rag app"
+python main.py
+```
+
+When the chat starts, type:
+```
+reload
+```
+
+This will index:
+- `prompt-engineering-for-llms..._RAW_TEXT.txt` (Lossless page-by-page extraction)
+- `prompt-engineering-for-llms..._INDEX.txt` (Heading and page mapping)
+
+---
+
+### Step 2: Query with MODE A
+
+#### Method 1: Automatic Detection (Page Queries)
+Just ask for a page number:
+```
+Page 14
+```
+```
+What is on page 20?
+```
+```
+Show me page 13
+```
+
+#### Method 2: Explicit Mode Selection
+Start your query with `MODE: A`
+```
+MODE: A
+What does the book say about transformers?
+```
+
+#### Method 3: Exact Recall Keywords
+Use these phrases:
+```
+Give me the exact text about GPT-2
+```
+```
+Word for word, what is written about attention mechanism?
+```
+```
+Verbatim text from page 25
+```
+
+#### Method 4: MODE B (Stuck-Point Explanation)
+If you find a specific sentence or concept confusing, use:
+```
+MODE: B
+I am confused about the "thought vector" on page 20.
+```
+```
+Explain this part: "it could solve most of them" on page 14.
+```
+
+---
+
+## 🎯 WHAT THE MODES DO
+
+### 📄 MODE A: EXACT RECALL
+✅ Returns EXACT text from the book
+✅ Preserves original paragraph structure
+✅ NO summaries or explanations (unless you ask)
+
+### 🧩 MODE B: STUCK-POINT EXPLANATION
+✅ Explains ONLY the specific part you're stuck on
+✅ Uses context from the book to clarify
+✅ Connects the explanation back to the original text
+
+---
+
+## 📊 EXAMPLE USAGE
+
+### Query:
+```
+Page 14
+```
+
+### Expected Response:
+```
+================================================================================
+📄 MODE A: EXACT RECALL — PAGE 14
+================================================================================
+
+[EXACT TEXT FROM PAGE 14 - WORD FOR WORD]
+
+chance of predicting the next word―it could generate whole statements and
+whole functions from just the docstring. Functions that worked!
+Before we decided what we could build with this model...
+[etc.]
+
+================================================================================
+[MODE A: Lossless extraction complete]
+```
+
+---
+
+## 🚀 NEXT PHASES (Coming Soon)
+
+- **MODE B:** Stuck-Point Explanation (explain confusing parts only)
+- **MODE C:** Concept Linking (connect ideas across chapters)
+- **MODE D:** Revision/Oral Mode (voice-friendly sequential reading)
+- **MODE E:** Active Recall (self-testing questions)
+
+---
+
+## 🛠️ FILES CREATED
+
+1. `mode_a_extractor.py` — Enhanced PDF extraction with heading detection
+2. `mode_a_handler.py` — Query detection and exact recall logic
+3. `main.py` — Updated with MODE A integration
+4. `[BOOK]_RAW_TEXT.txt` — Lossless page-by-page extraction
+5. `[BOOK]_INDEX.txt` — Structured heading and page index
+
+---
+
+## ✅ VERIFICATION CHECKLIST
+
+- [ ] Run `python main.py`
+- [ ] Type `reload` to index new files
+- [ ] Test: `Page 14`
+- [ ] Verify: Response shows exact text from page 14
+- [ ] Test: `MODE: A` with a concept query
+- [ ] Verify: No summaries, just raw text
+
+---
+
+**MODE A is now live! Test it and let me know if you want any adjustments before we build MODE B.** 🎯
