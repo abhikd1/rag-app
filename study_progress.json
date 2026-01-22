@@ -1,0 +1,286 @@
+{
+  "started_date": "2026-01-16T00:18:58.577077",
+  "last_active": "2026-01-22T17:16:56.484405",
+  "total_sessions": 36,
+  "total_questions": 35,
+  "chapters_covered": [
+    {
+      "name": "Chapter 3: Database Design",
+      "subject": "DBMS",
+      "completed_date": "2026-01-16T00:18:58.577077"
+    }
+  ],
+  "topics_studied": [
+    {
+      "name": "Normalization",
+      "chapter": "Chapter 3",
+      "timestamp": "2026-01-16T00:18:58.577077"
+    }
+  ],
+  "questions_asked": [
+    {
+      "question": "What is normalization?",
+      "timestamp": "2026-01-16T00:18:58.577077",
+      "mode": "B",
+      "subject": "DBMS"
+    },
+    {
+      "question": "What is normalization?",
+      "timestamp": "2026-01-16T00:19:23.182330",
+      "mode": "B",
+      "subject": "DBMS"
+    },
+    {
+      "question": "hi",
+      "timestamp": "2026-01-22T04:07:27.558925",
+      "mode": "groq",
+      "subject": "General"
+    },
+    {
+      "question": "hi",
+      "timestamp": "2026-01-22T04:10:28.357802",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "hi",
+      "timestamp": "2026-01-22T04:36:20.044466",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "tell me a joke about programmers",
+      "timestamp": "2026-01-22T04:38:17.434093",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "hi",
+      "timestamp": "2026-01-22T04:42:39.003218",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "hi",
+      "timestamp": "2026-01-22T04:49:20.746189",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "tell mw waht all pdf i can process",
+      "timestamp": "2026-01-22T04:49:51.250124",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "how many pdf you are have",
+      "timestamp": "2026-01-22T04:50:14.113353",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "tell me waht this pdf is bout",
+      "timestamp": "2026-01-22T04:55:24.537470",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "hi",
+      "timestamp": "2026-01-22T04:58:58.287025",
+      "mode": "gemini",
+      "subject": "General"
+    },
+    {
+      "question": "tell me this pdf is which about",
+      "timestamp": "2026-01-22T05:00:07.879620",
+      "mode": "gemini",
+      "subject": "General"
+    },
+    {
+      "question": "tell me the last uploaded pdf is what  for",
+      "timestamp": "2026-01-22T05:00:47.391541",
+      "mode": "gemini",
+      "subject": "General"
+    },
+    {
+      "question": "tell me waht is on the page 1",
+      "timestamp": "2026-01-22T05:01:14.126419",
+      "mode": "groq",
+      "subject": "General"
+    },
+    {
+      "question": "The last uploaded PDF mentioned and primarily discussed in the provided content is the **Class 12 Computer Chapter 2 PDF**. 📚\n\nThis specific PDF, referred to as \"computer 12ch2.pdf,\" is loaded into the system for **testing and verification**. Its purpose is to allow students to ask questions, revise, test themselves, and re-read exact text from that chapter. Essentially, it's the core document used to demonstrate and ensure the system's study capabilities. ✨\nModel: gemini\n👤\ntell me waht is on the page 1",
+      "timestamp": "2026-01-22T05:01:29.535975",
+      "mode": "groq",
+      "subject": "General"
+    },
+    {
+      "question": "hi",
+      "timestamp": "2026-01-22T05:13:13.417903",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "tell me what is there in the pdf i processed",
+      "timestamp": "2026-01-22T05:14:11.343646",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "d: bpsc tre 3_compressed.pdf (Processed)  want for this pdf",
+      "timestamp": "2026-01-22T05:14:57.807407",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "tell me what is this pdf about",
+      "timestamp": "2026-01-22T05:28:05.203058",
+      "mode": "gemini",
+      "subject": "General"
+    },
+    {
+      "question": "tell me what this pdf is about",
+      "timestamp": "2026-01-22T05:35:27.408816",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "'What is the subject of this document? Focus on the title and organization'.",
+      "timestamp": "2026-01-22T05:41:53.236721",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "what is this about",
+      "timestamp": "2026-01-22T05:47:22.919278",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "Context: The following question is specifically about the file 'accountancy pdf.pdf'. Ignore all other previous documents. \n\nQuestion: tell mw waht is this pdf",
+      "timestamp": "2026-01-22T05:51:27.413157",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "Context: The following question is specifically about the file 'accountancy pdf.pdf'. Ignore all other previous documents. \n\nQuestion: hi",
+      "timestamp": "2026-01-22T16:49:35.261921",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "Context: The following question is specifically about the file 'accountancy pdf.pdf'. Ignore all other previous documents. \n\nQuestion: tell me what this pdf is about",
+      "timestamp": "2026-01-22T16:49:48.930522",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "Context: The following question is specifically about the file 'Knowledge_Machine_v3_Canonical_Notes.pdf'. Ignore all other previous documents. \n\nQuestion: read this",
+      "timestamp": "2026-01-22T16:50:38.007444",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "Context: The following question is specifically about the file 'computer 12ch2.pdf'. Ignore all other previous documents. \n\nQuestion: What is the subject of this document? Provide a high-level summary.",
+      "timestamp": "2026-01-22T16:52:41.631342",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "Context: The following question is specifically about the file 'computer 12ch2.pdf'. Ignore all other previous documents. \n\nQuestion: tell; me waht is onthe 3rd page od that pdf",
+      "timestamp": "2026-01-22T16:53:06.835804",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "Context: The following question is specifically about the file 'computer 12ch2.pdf'. Ignore all other previous documents. \n\nQuestion: tell  me waht is on the page 3",
+      "timestamp": "2026-01-22T16:53:51.997486",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "Context: The following question is specifically about the file 'computer 12ch2.pdf'. Ignore all other previous documents. \n\nQuestion: no i want whta is wroiiten on hte page 3 give me and theat explain not anyn things from your  sid3e",
+      "timestamp": "2026-01-22T16:55:12.884013",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "What documents do you have access to?",
+      "timestamp": "2026-01-22T17:08:26.857487",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "hui",
+      "timestamp": "2026-01-22T17:09:08.077998",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "tell me what is on thepage 2",
+      "timestamp": "2026-01-22T17:09:29.688893",
+      "mode": null,
+      "subject": "General Study"
+    },
+    {
+      "question": "tell me waht is in the pdf",
+      "timestamp": "2026-01-22T17:09:44.332748",
+      "mode": null,
+      "subject": "General Study"
+    }
+  ],
+  "study_modes_used": {
+    "mode_a_exact_recall": 0,
+    "mode_b_explanation": 0,
+    "mode_c_linking": 0,
+    "mode_d_revision": 0,
+    "mode_e_testing": 0
+  },
+  "documents_processed": [
+    {
+      "name": "computer 11 ch 1 pdf.pdf",
+      "type": "pdf",
+      "processed_date": "2026-01-22T04:59:28.511884"
+    },
+    {
+      "name": "computer 12ch2.pdf",
+      "type": "pdf",
+      "processed_date": "2026-01-22T04:59:40.083448"
+    },
+    {
+      "name": "COMBINE_NOTFN.pdf",
+      "type": "pdf",
+      "processed_date": "2026-01-22T04:59:53.550644"
+    },
+    {
+      "name": "bpsc tre 3_compressed.pdf",
+      "type": "pdf",
+      "processed_date": "2026-01-22T05:28:05.194857"
+    },
+    {
+      "name": "bpsc tre 3.pdf",
+      "type": "pdf",
+      "processed_date": "2026-01-22T05:29:24.732078"
+    }
+  ],
+  "last_topic": "Normalization",
+  "achievements": [
+    {
+      "title": "🎯 First Question Asked!",
+      "earned_date": "2026-01-16T00:18:58.577077"
+    },
+    {
+      "title": "📚 First Chapter Completed!",
+      "earned_date": "2026-01-16T00:18:58.577077"
+    }
+  ],
+  "study_streak": {
+    "current_streak": 1,
+    "longest_streak": 1,
+    "last_study_date": "2026-01-22"
+  },
+  "time_spent": {
+    "total_minutes": 60,
+    "by_subject": {}
+  }
+}

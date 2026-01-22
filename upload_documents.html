@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 Document Upload & Processor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .upload-zone {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 60px 40px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .upload-zone:hover {
+            border-color: #764ba2;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            transform: translateY(-5px);
+        }
+
+        .upload-zone.dragover {
+            border-color: #764ba2;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .upload-zone h2 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .upload-zone p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .file-list {
+            margin-top: 30px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .file-icon {
+            font-size: 2em;
+        }
+
+        .file-details h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .file-details p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-process {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-process:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-remove {
+            background: #ff4757;
+            color: white;
+        }
+
+        .btn-remove:hover {
+            background: #ff3838;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .status-message {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .status-success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+
+        .status-info {
+            background: #d1ecf1;
+            border: 2px solid #17a2b8;
+            color: #0c5460;
+        }
+
+        .command-box {
+            background: #2d2d2d;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        .command-box h3 {
+            color: #00ff00;
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #666;
+            font-weight: 600;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Document Upload & Processor</h1>
+            <p>Upload PDFs and TXT files to add them to your RAG system</p>
+        </div>
+
+        <div class="card">
+            <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-icon">📁</div>
+                <h2>Drop files here or click to browse</h2>
+                <p>Supports PDF and TXT files</p>
+                <input type="file" id="fileInput" multiple accept=".pdf,.txt" onchange="handleFiles(this.files)">
+            </div>
+
+            <div class="file-list" id="fileList"></div>
+
+            <div class="status-message" id="statusMessage"></div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Document Statistics</h2>
+            <div class="stats">
+                <div class="stat-card">
+                    <h3 id="totalFiles">0</h3>
+                    <p>Files Uploaded</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalSize">0 MB</h3>
+                    <p>Total Size</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="processedFiles">0</h3>
+                    <p>Processed</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚡ How to Process Documents</h2>
+            <p style="margin-bottom: 15px;">After uploading files, run these commands in your terminal:</p>
+
+            <div class="command-box">
+                <h3>📄 Process PDF (Extract & Index):</h3>
+                <div id="pdfCommands">Click "Process" button on a PDF file above to see the command</div>
+            </div>
+
+            <div class="command-box" style="margin-top: 15px;">
+                <h3>🔄 Reload Documents into RAG:</h3>
+                <div>python main.py<br># Then type: reload</div>
+            </div>
+
+            <div class="command-box" style="margin-top: 15px;">
+                <h3>💬 Ask Questions:</h3>
+                <div>python gemini_rag.py "What is in the document?"</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let uploadedFiles = [];
+        let processedCount = 0;
+
+        // Drag and drop handlers
+        const uploadZone = document.getElementById('uploadZone');
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        function handleFiles(files) {
+            const fileArray = Array.from(files);
+
+            fileArray.forEach(file => {
+                // Check if file is PDF or TXT
+                if (!file.name.endsWith('.pdf') && !file.name.endsWith('.txt')) {
+                    showStatus('error', `❌ ${file.name} is not a PDF or TXT file`);
+                    return;
+                }
+
+                // Check if already uploaded
+                if (uploadedFiles.find(f => f.name === file.name)) {
+                    showStatus('info', `ℹ️ ${file.name} is already in the list`);
+                    return;
+                }
+
+                uploadedFiles.push(file);
+                addFileToList(file);
+            });
+
+            updateStats();
+            showStatus('success', `✅ ${fileArray.length} file(s) added successfully!`);
+        }
+
+        function addFileToList(file) {
+            const fileList = document.getElementById('fileList');
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.id = `file-${uploadedFiles.length - 1}`;
+
+            const icon = file.name.endsWith('.pdf') ? '📕' : '📄';
+            const size = (file.size / 1024 / 1024).toFixed(2);
+
+            fileItem.innerHTML = `
+                <div class="file-info">
+                    <div class="file-icon">${icon}</div>
+                    <div class="file-details">
+                        <h4>${file.name}</h4>
+                        <p>${size} MB</p>
+                    </div>
+                </div>
+                <div class="file-actions">
+                    <button class="btn btn-process" onclick="processFile(${uploadedFiles.length - 1})">
+                        Process 🚀
+                    </button>
+                    <button class="btn btn-remove" onclick="removeFile(${uploadedFiles.length - 1})">
+                        Remove ❌
+                    </button>
+                </div>
+                <div class="progress-bar" id="progress-${uploadedFiles.length - 1}">
+                    <div class="progress-fill"></div>
+                </div>
+            `;
+
+            fileList.appendChild(fileItem);
+        }
+
+        function processFile(index) {
+            const file = uploadedFiles[index];
+            const progressBar = document.getElementById(`progress-${index}`);
+            const progressFill = progressBar.querySelector('.progress-fill');
+
+            // Show progress bar
+            progressBar.style.display = 'block';
+
+            // Simulate processing
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                progressFill.style.width = progress + '%';
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        progressBar.style.display = 'none';
+                        progressFill.style.width = '0%';
+                        processedCount++;
+                        updateStats();
+
+                        // Show command
+                        if (file.name.endsWith('.pdf')) {
+                            const command = `python mode_a_extractor.py "documents/${file.name}"`;
+                            document.getElementById('pdfCommands').innerHTML = command;
+                            showStatus('success', `✅ ${file.name} ready to process! Copy the command below.`);
+                        } else {
+                            showStatus('success', `✅ ${file.name} uploaded! Run "reload" in your RAG app.`);
+                        }
+                    }, 500);
+                }
+            }, 200);
+        }
+
+        function removeFile(index) {
+            uploadedFiles.splice(index, 1);
+            document.getElementById(`file-${index}`).remove();
+            updateStats();
+            showStatus('info', 'ℹ️ File removed from list');
+        }
+
+        function updateStats() {
+            document.getElementById('totalFiles').textContent = uploadedFiles.length;
+
+            const totalSize = uploadedFiles.reduce((sum, file) => sum + file.size, 0);
+            document.getElementById('totalSize').textContent = (totalSize / 1024 / 1024).toFixed(2) + ' MB';
+
+            document.getElementById('processedFiles').textContent = processedCount;
+        }
+
+        function showStatus(type, message) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.className = `status-message status-${type}`;
+            statusDiv.textContent = message;
+            statusDiv.style.display = 'block';
+
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Initialize
+        updateStats();
+    </script>
+</body>
+
+</html>

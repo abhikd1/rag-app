@@ -1,0 +1,102 @@
+{
+  "1": {
+    "page_number": 1,
+    "char_count": 1593,
+    "preview": "In this Chapter »» Introduction to Files »» Types of Files »» Opening and Closing a  Text File »» Writing to a Text File »» Reading from a Text File »» Setting Offsets in a File »» Creating and Traver"
+  },
+  "2": {
+    "page_number": 2,
+    "char_count": 2667,
+    "preview": "Computer Science - Class XII 20 So, what is a file? A file is a named location on a  secondary storage media where data are permanently  stored for later access. 2.2. Types of Files Computers store ev"
+  },
+  "3": {
+    "page_number": 3,
+    "char_count": 2181,
+    "preview": "File Handling in Python 21 The file_object  establishes a  link between the  program and the  data file stored  in the permanent  storage. 2.2.2 Binary Files Binary files are also stored in terms of b"
+  },
+  "4": {
+    "page_number": 4,
+    "char_count": 2430,
+    "preview": "Computer Science - Class XII 22 •\t <file.mode> returns the access mode in which the  file was opened. •\t <file.name> returns the name of the file. The file_name should be the name of the file that  ha"
+  },
+  "5": {
+    "page_number": 5,
+    "char_count": 1912,
+    "preview": "File Handling in Python 23 In the above statement, the file myfile.txt is opened  in append and read modes. The file object will be at the  end of the file. That means we can write data at the end  of"
+  },
+  "6": {
+    "page_number": 6,
+    "char_count": 1970,
+    "preview": "Computer Science - Class XII 24 hand, in append mode, new data will be added at the  end of the previous data as the file object is at the end of  the file. After opening the file, we can use the foll"
+  },
+  "7": {
+    "page_number": 7,
+    "char_count": 1562,
+    "preview": "File Handling in Python 25 write(), the writelines() method does not return the  number of characters written in the file. The following  code explains the use of writelines(). >>> myobject=open(\"myfi"
+  },
+  "8": {
+    "page_number": 8,
+    "char_count": 1879,
+    "preview": "Computer Science - Class XII 26 2.5.2 The readline([n]) method This method reads one complete line from a file where  each line terminates with a newline (\\n) character. It  can also be used to read a"
+  },
+  "9": {
+    "page_number": 9,
+    "char_count": 1520,
+    "preview": "File Handling in Python 27 >>> for line in d:  \t \t\t    words=line.split()  \t       print(words) ['Hello', 'everyone'] ['Writing', 'multiline', 'strings'] ['This', 'is', 'the', 'third', 'line'] In the "
+  },
+  "10": {
+    "page_number": 10,
+    "char_count": 1776,
+    "preview": "Computer Science - Class XII 28 Output of Program 2-1: >>>   RESTART: Path_to_file\\Program2-1.py  Enter the contents to be written in the file:  roll_numbers = [1, 2, 3, 4, 5, 6] Now reading the conte"
+  },
+  "11": {
+    "page_number": 11,
+    "char_count": 1731,
+    "preview": "FILE HANDLING IN PYTHON 29 Program 2-2  Application of seek() and tell()  print(\"Learning to move the ﬁ le object\") ﬁ leobject=open(\"testﬁ le.txt\",\"r+\") str=ﬁ leobject.read() print(str) print(\"Initial"
+  },
+  "12": {
+    "page_number": 12,
+    "char_count": 1743,
+    "preview": "Computer Science - Class XII 30 created in append mode (a), then the new data will be  written after the existing data. In both cases, if the file  does not exist, then a new empty file will be create"
+  },
+  "13": {
+    "page_number": 13,
+    "char_count": 1579,
+    "preview": "File Handling in Python 31 Till now, we have been creating separate programs  for writing data to a file and for reading the file. Now  let us create one single program to read and write data  using a"
+  },
+  "14": {
+    "page_number": 14,
+    "char_count": 2152,
+    "preview": "Computer Science - Class XII 32 2.8 The Pickle Module We know that Python considers everything as an object.  So, all data types including list, tuple, dictionary, etc.  are also considered as objects"
+  },
+  "15": {
+    "page_number": 15,
+    "char_count": 1603,
+    "preview": "File Handling in Python 33 Program 2-6\t Pickling data in Python import pickle listvalues=[1,\"Geetika\",'F', 26] fileobject=open(\"mybinary.dat\", \"wb\") pickle.dump(listvalues,fileobject) fileobject.close"
+  },
+  "16": {
+    "page_number": 16,
+    "char_count": 1471,
+    "preview": "Computer Science - Class XII 34 Program 2-8  To perform basic operations on a binary file using pickle module # Program to write and read employee records in a binary file import pickle print(\"WORKING"
+  },
+  "17": {
+    "page_number": 17,
+    "char_count": 1224,
+    "preview": "File Handling in Python 35 Output of Program 2-8: >>>   RESTART: Path_to_file\\Program2-8.py  WORKING WITH BINARY FILES Enter Records of Employees RECORD No. 1 \t \t Employee number : 11 \t \t Employee Nam"
+  },
+  "18": {
+    "page_number": 18,
+    "char_count": 1814,
+    "preview": "Computer Science - Class XII 36 special symbols. Such files are stored with  extensions like .txt, .py, .c, .csv, .html, etc. Each  byte of a text file represents a character. •\t Each line of a text f"
+  },
+  "19": {
+    "page_number": 19,
+    "char_count": 1382,
+    "preview": "File Handling in Python 37 Exercise 1.\t Differentiate between: a)\t text file and binary file b)\t readline() and readlines() c)\t write() and writelines() 2.\t Write the use and syntax for the following "
+  },
+  "20": {
+    "page_number": 20,
+    "char_count": 934,
+    "preview": "Computer Science - Class XII 38 7.\t Write a Python program to open the file hello.txt used in  question no 6 in read mode to display its contents. What  will be the difference if the file was opened i"
+  }
+}

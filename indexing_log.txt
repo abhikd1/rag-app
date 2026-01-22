@@ -1,0 +1,183 @@
+﻿python : C:\Use
+rs\sumit\rag ap
+p\main.py:21: L
+angChainDepreca
+tionWarning: 
+The class `Hugg
+ingFaceEmbeddin
+gs` was 
+deprecated in 
+LangChain 
+0.2.2 and will 
+be removed in 
+1.0. An 
+updated 
+version of the 
+class exists 
+in the `langcha
+in-huggingface 
+package and 
+should be used 
+instead. To 
+use it run 
+`pip install 
+-U `langchain-h
+uggingface` 
+and import as 
+`from `langchai
+n_huggingface 
+import HuggingF
+aceEmbeddings``
+.
+At line:1 
+char:1
++ python -c 
+"from main 
+import FreeDocu
+mentQA; import 
+os; qa = 
+FreeDocum ...
++ ~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+~~~~~~~~~~~
+    + Category 
+   Info        
+      : NotS   
+ pecified:     
+(C:\Users\    
+sumit\...c    
+eEmbedding    
+s``.:Strin    
+g) [], Rem    
+oteExcepti    
+on
+    + FullyQua 
+   lifiedErro  
+  rId : Nati   
+ veCommandE    
+rror
+ 
+  self.embeddin
+gs = HuggingFac
+eEmbeddings(mod
+el_name="all-Mi
+niLM-L6-v2")
+C:\Users\sumit\
+rag app\main.py
+:24: LangChainD
+eprecationWarni
+ng: The class 
+`Chroma` was 
+deprecated in 
+LangChain 
+0.2.9 and will 
+be removed in 
+1.0. An 
+updated 
+version of the 
+class exists 
+in the `langcha
+in-chroma 
+package and 
+should be used 
+instead. To 
+use it run 
+`pip install 
+-U `langchain-c
+hroma` and 
+import as 
+`from `langchai
+n_chroma 
+import 
+Chroma``.
+  self.vector_s
+tore = Chroma(
+Traceback 
+(most recent 
+call last):
+  File 
+"<string>", 
+line 1, in 
+<module>
+  File "C:\User
+s\sumit\rag 
+app\main.py", 
+line 62, in loa
+d_documents_fro
+m_folder
+    self.vector
+_store.add_docu
+ments(chunks)
+  File "C:\User
+s\sumit\AppData
+\Local\Programs
+\Python\Python3
+12\Lib\site-pac
+kages\langchain
+_core\vectorsto
+res\base.py", 
+line 257, in 
+add_documents
+    return self
+.add_texts(text
+s, metadatas, 
+**kwargs)
+           ^^^^
+^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
+^^^^^^^^
+  File "C:\User
+s\sumit\AppData
+\Local\Programs
+\Python\Python3
+12\Lib\site-pac
+kages\langchain
+_community\vect
+orstores\chroma
+.py", line 
+299, in 
+add_texts
+    self._colle
+ction.upsert(
+  File "C:\User
+s\sumit\AppData
+\Local\Programs
+\Python\Python3
+12\Lib\site-pac
+kages\chromadb\
+api\models\Coll
+ection.py", 
+line 460, in 
+upsert
+    self._clien
+t._upsert(
+  File "C:\User
+s\sumit\AppData
+\Local\Programs
+\Python\Python3
+12\Lib\site-pac
+kages\chromadb\
+api\rust.py", 
+line 498, in 
+_upsert
+    return self
+.bindings.upser
+t(
+           ^^^^
+^^^^^^^^^^^^^^^
+^^
+chromadb.errors
+.InternalError:
+ ValueError: 
+Batch size of 
+9330 is 
+greater than 
+max batch size 
+of 5461
+[INFO] Loading 'Understanding' model... (Fast after first run)
+[INFO] RAG System Ready!
+QA Initialized
+[INFO] Scanning folder: ./documents
+[INFO] Indexing 9330 sections from 1625 document pages...

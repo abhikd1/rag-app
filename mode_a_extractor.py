@@ -43,100 +43,75 @@ def detect_heading(text, font_size=None):
     return False
 
 
-def extract_with_headings(pdf_path, output_dir=None):
-    """
-    Extract PDF with heading detection and create:
-    1. RAW_TEXT.txt - Pure page-by-page text
-    2. INDEX.txt - Structured index with headings
-    """
+def extract_with_headings(pdf_path):
+    """Enhanced extraction with PAGE MARKERS for page-specific queries"""
+    import fitz  # PyMuPDF
+    import json
+    from pathlib import Path
     
+    pdf_path = Path(pdf_path)
+    base_name = pdf_path.stem
+    
+    print(f"\n{'='*60}")
+    print(f"📄 Extracting with PAGE MARKERS: {pdf_path.name}")
+    print(f"{'='*60}")
+    
+    # Open PDF
     doc = fitz.open(pdf_path)
     total_pages = len(doc)
     
-    # Setup output directory
-    if output_dir is None:
-        output_dir = os.path.dirname(pdf_path)
-    
-    base_name = os.path.splitext(os.path.basename(pdf_path))[0]
-    raw_text_path = os.path.join(output_dir, f"{base_name}_RAW_TEXT.txt")
-    index_path = os.path.join(output_dir, f"{base_name}_INDEX.txt")
-    
-    print(f"📚 Processing: {os.path.basename(pdf_path)}")
-    print(f"📄 Total Pages: {total_pages}")
-    print(f"💾 Output Directory: {output_dir}")
-    print("=" * 80)
+    print(f"📊 Total pages: {total_pages}")
     
     # Storage
-    headings = []  # (heading_text, page_num, line_num)
-    current_chapter = None
+    full_text = []
+    page_index = {}
     
-    # Extract raw text with heading detection
-    with open(raw_text_path, "w", encoding="utf-8") as raw_file:
-        raw_file.write("=" * 80 + "\n")
-        raw_file.write(f"📖 LOSSLESS BOOK EXTRACTION — MODE A COMPATIBLE\n")
-        raw_file.write(f"Source: {os.path.basename(pdf_path)}\n")
-        raw_file.write(f"Total Pages: {total_pages}\n")
-        raw_file.write("=" * 80 + "\n\n")
+    # Extract EACH page separately
+    for page_num in range(total_pages):
+        page = doc[page_num]
+        text = page.get_text()
+        text = text.strip()
         
-        for page_num in range(total_pages):
-            page = doc.load_page(page_num)
-            text = page.get_text()
+        if text:
+            # ADD PAGE MARKER (critical for page queries!)
+            page_marker = f"\n\n{'='*60}\n=== PAGE {page_num + 1} ===\n{'='*60}\n\n"
+            full_text.append(page_marker)
+            full_text.append(text)
             
-            # Write page header
-            raw_file.write(f"\n{'='*80}\n")
-            raw_file.write(f"📄 PAGE {page_num + 1}\n")
-            raw_file.write(f"{'='*80}\n\n")
+            # Index this page
+            page_index[str(page_num + 1)] = {  # Store as string for JSON
+                'page_number': page_num + 1,
+                'char_count': len(text),
+                'preview': text[:200].replace('\n', ' ')
+            }
             
-            # Process text line by line for heading detection
-            if text.strip():
-                lines = text.split('\n')
-                for line_num, line in enumerate(lines, 1):
-                    # Check if heading
-                    if detect_heading(line):
-                        headings.append((line.strip(), page_num + 1, line_num))
-                        
-                        # Track chapters
-                        if re.match(r'^(Chapter|CHAPTER|Part|PART)', line):
-                            current_chapter = line.strip()
-                
-                # Write full text
-                raw_file.write(text)
-            else:
-                raw_file.write("⚠️ [This page appears to be blank or image-only]\n")
-            
-            raw_file.write("\n\n")
-            
-            # Progress
-            if (page_num + 1) % 10 == 0:
-                print(f"✅ Processed {page_num + 1}/{total_pages} pages...")
+            print(f"✅ Page {page_num + 1}: {len(text)} chars")
     
-    # Create structured index
-    with open(index_path, "w", encoding="utf-8") as idx_file:
-        idx_file.write("=" * 80 + "\n")
-        idx_file.write(f"📑 BOOK INDEX — HEADINGS & PAGE MAPPING\n")
-        idx_file.write(f"Source: {os.path.basename(pdf_path)}\n")
-        idx_file.write(f"Total Headings Detected: {len(headings)}\n")
-        idx_file.write("=" * 80 + "\n\n")
-        
-        current_chapter_name = None
-        
-        for heading, page, line in headings:
-            # Check if new chapter
-            if re.match(r'^(Chapter|CHAPTER|Part|PART)', heading):
-                idx_file.write(f"\n{'='*80}\n")
-                idx_file.write(f"📖 {heading}\n")
-                idx_file.write(f"{'='*80}\n")
-                current_chapter_name = heading
-            else:
-                # Sub-heading
-                idx_file.write(f"  → {heading} (Page {page})\n")
+    # Save full text WITH page markers
+    raw_file = pdf_path.parent / f"{base_name}_RAW_TEXT.txt"
+    with open(raw_file, 'w', encoding='utf-8') as f:
+        f.write(''.join(full_text))
     
-    print(f"\n🎉 Extraction Complete!")
-    print(f"📄 Raw Text: {raw_text_path}")
-    print(f"📑 Index: {index_path}")
-    print(f"\n💡 Next Step: Type 'reload' in your RAG app to index these files.")
+    # Save page index JSON
+    index_file = pdf_path.parent / f"{base_name}_PAGE_INDEX.json"
+    with open(index_file, 'w', encoding='utf-8') as f:
+        json.dump(page_index, f, indent=2, ensure_ascii=False)
     
-    return raw_text_path, index_path
+    print(f"\n✅ Saved:")
+    print(f"   📄 {raw_file.name} ({len(full_text)} parts with page markers)")
+    print(f"   📋 {index_file.name} ({len(page_index)} pages indexed)")
+    
+    # VERIFY page markers
+    full_content = ''.join(full_text)
+    import re
+    markers_found = len(re.findall(r'=== PAGE \d+ ===', full_content))
+    print(f"   ✅ Verified: {markers_found} page markers in output")
+    
+    print(f"{'='*60}\n")
+    
+    doc.close()
+    return raw_file, index_file
+
 
 
 if __name__ == "__main__":

@@ -1,15 +1,52 @@
-chroma_db/
+# ============================================
+# VIRTUAL ENVIRONMENT (NEVER COMMIT THIS!)
+# ============================================
 rag_app/
+venv/
+env/
+ENV/
+.venv/
+
+# ============================================
+# PYTHON PACKAGES
+# ============================================
+Lib/
+Scripts/
+pyvenv.cfg
+site-packages/
+
+# ============================================
+# DATABASES & CACHE
+# ============================================
+chroma_db/
 __pycache__/
 *.pyc
+*.pyo
+*.db
+
+# ============================================
+# SECRETS
+# ============================================
 .env
-documents/
-*.txt
-*.pdf
-logs/
-evaluation_outputs/
-groq_output.txt
-groq_output_part2.txt
-groq_meta_response.txt
-debug_answer.txt
-output.txt
+*.key
+secrets.txt
+
+# ============================================
+# LOGS & TEMP FILES
+# ============================================
+*.log
+*.tmp
+debug_*.txt
+
+# ============================================
+# IDE FILES
+# ============================================
+.vscode/
+.idea/
+*.swp
+
+# ============================================
+# SYSTEM FILES
+# ============================================
+Thumbs.db
+.DS_Store

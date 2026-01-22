@@ -1,12 +1,13 @@
+
 import os
 import sys
 from groq import Groq
-from dotenv import load_dotenv
-
-load_dotenv()
 
 def run_pro_groq_transcript_finale():
     key = os.getenv("GROQ_API_KEY")
+    if not key:
+        print("GROQ_ERROR: GROQ_API_KEY environment variable not set.")
+        return
     client = Groq(api_key=key)
     
     # 📝 RAW TRANSCRIPT CHUNK: 1:30:00 - THE END

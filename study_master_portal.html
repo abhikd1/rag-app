@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 StudyMaster Pro | AI Unified Portal</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --bg-dark: #0f172a;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.15) 0, transparent 50%);
+            min-height: 100vh;
+            color: var(--text-main);
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 260px;
+            background: var(--bg-dark);
+            color: white;
+            padding: 2rem 1.5rem;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 3rem;
+            background: linear-gradient(to right, #818cf8, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #94a3b8;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            padding: 2rem 3rem;
+        }
+
+        .view {
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Chat View Styles */
+        .chat-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            height: 80vh;
+        }
+
+        .chat-box {
+            background: white;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .messages {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .bubble {
+            max-width: 80%;
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            line-height: 1.6;
+        }
+
+        .bubble.ai {
+            background: #f8fafc;
+            align-self: flex-start;
+            border: 1px solid #e2e8f0;
+        }
+
+        .bubble.user {
+            background: var(--primary);
+            color: white;
+            align-self: flex-end;
+        }
+
+        .input-area {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 1rem;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            border: 2px solid #f1f5f9;
+            background: #f8fafc;
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            outline: none;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary);
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+        }
+
+        /* Dashboard/Progress Styles */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Upload Zone Styles */
+        .upload-card {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            border: 3px dashed #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-card:hover {
+            border-color: var(--primary);
+            background: #f8fafc;
+        }
+
+        /* Achievements */
+        .achievements {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .badge {
+            background: white;
+            padding: 1rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .badge-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 80px;
+                padding: 2rem 0.5rem;
+            }
+
+            .logo span,
+            .nav-item span {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 80px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <div class="logo">
+            <span>🚀 StudyPro</span>
+        </div>
+        <div class="nav-item active" onclick="showView('chat', this)">
+            <span>💬 Smart Chat</span>
+        </div>
+        <div class="nav-item" onclick="showView('upload', this)">
+            <span>📂 Upload Center</span>
+        </div>
+        <div class="nav-item" onclick="showView('progress', this)">
+            <span>📊 Dashboard</span>
+        </div>
+        <div class="nav-item" onclick="showView('modes', this)">
+            <span>🎓 Study Modes</span>
+        </div>
+    </div>
+
+    <div class="main-content">
+
+        <!-- CHAT VIEW -->
+        <div id="chat" class="view active">
+            <header style="margin-bottom: 2rem;">
+                <h1 style="font-size: 2rem;">AI Learning Companion</h1>
+                <p style="color: var(--text-muted);">Processing: documents/all transcript.txt</p>
+            </header>
+
+            <div class="chat-layout">
+                <div class="chat-box">
+                    <div class="messages" id="chatMessages">
+                        <div class="bubble ai">
+                            Hello! I am your RAG session assistant. I have indexed your Hindi transcript (0-20 min). How
+                            can I help you today?
+                        </div>
+                    </div>
+                    <div class="input-area">
+                        <input type="text" id="chatInput"
+                            placeholder="Ask about normalization, chapter 3, or 'page 50'..."
+                            onkeypress="checkEnter(event)">
+                        <button class="btn" onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+
+                <div class="sidebar-info">
+                    <div style="background: white; padding: 1.5rem; border-radius: 20px; border: 1px solid #e2e8f0;">
+                        <h3 style="margin-bottom: 1rem;">Active Mode</h3>
+                        <div
+                            style="background: #f1f5f9; padding: 1rem; border-radius: 12px; font-weight: 600; color: var(--primary);">
+                            Default: Conversational RAG
+                        </div>
+                        <p style="font-size: 0.85rem; margin-top: 1rem; color: var(--text-muted);">
+                            Detected Model: Gemini 2.5 Flash
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UPLOAD VIEW -->
+        <div id="upload" class="view">
+            <header style="margin-bottom: 2rem;">
+                <h1>Document Management</h1>
+                <p style="color: var(--text-muted);">Add new PDFs or Transcripts to your brain.</p>
+            </header>
+
+            <div class="upload-card">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">📂</div>
+                <h2>Drag & Drop Documents</h2>
+                <p style="color: var(--text-muted); margin-top: 0.5rem;">Supports PDF (Headings detected) & TXT</p>
+                <div style="margin-top: 2rem;">
+                    <button class="btn">Select Files</button>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem;">
+                <h3>Active Document Library</h3>
+                <div style="margin-top: 1rem; display: grid; gap: 1rem;">
+                    <div class="badge" style="width: 100%; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <span>📄</span>
+                            <div>
+                                <strong>all transcript.txt</strong>
+                                <div style="font-size: 0.8rem; color: #10b981;">Indexed (0-20 mins)</div>
+                            </div>
+                        </div>
+                        <span style="color: var(--text-muted); font-size: 0.8rem;">2.4 MB</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROGRESS VIEW -->
+        <div id="progress" class="view">
+            <header style="margin-bottom: 2rem;">
+                <h1>Your Study Journey</h1>
+                <p style="color: var(--text-muted);">Lossless learning stats from your sessions.</p>
+            </header>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">25</div>
+                    <div class="stat-label">Total Questions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Study Streak (Days)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Chapters Covered</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">124</div>
+                    <div class="stat-label">Minutes Logged</div>
+                </div>
+            </div>
+
+            <div style="background: white; border-radius: 24px; padding: 2rem; margin-top: 1rem;">
+                <h3>Learning Achievements</h3>
+                <div class="achievements">
+                    <div class="badge"><span class="badge-icon">🎯</span> <span>First Search</span></div>
+                    <div class="badge"><span class="badge-icon">🔥</span> <span>3-Day Streak</span></div>
+                    <div class="badge"><span class="badge-icon">🎓</span> <span>Transcript Pro</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODES VIEW -->
+        <div id="modes" class="view">
+            <header style="margin-bottom: 2rem;">
+                <h1>Specialized Study Modes</h1>
+                <p style="color: var(--text-muted);">Use these keywords in chat to trigger surgical learning.</p>
+            </header>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div class="stat-card" style="border-left: 5px solid #6366f1;">
+                    <h3>📄 Mode A: Exact Recall</h3>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-muted);">"Show me page 50" -
+                        Returns verbatim text without any AI summary.</p>
+                </div>
+                <div class="stat-card" style="border-left: 5px solid #ec4899;">
+                    <h3>🧩 Mode B: Stuck Point</h3>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-muted);">"Explain this concept" -
+                        Minimal, surgical explanation for parts you don't get.</p>
+                </div>
+                <div class="stat-card" style="border-left: 5px solid #10b981;">
+                    <h3>🧠 Mode E: Self-Test</h3>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-muted);">"Quiz me on X" -
+                        Generates 3 levels of active recall questions.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function showView(viewId, element) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(v => v.classList.remove('active'));
+
+            document.getElementById(viewId).classList.add('active');
+            element.classList.add('active');
+        }
+
+        function checkEnter(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+
+            if (!input.value.trim()) return;
+
+            // User Message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'bubble user';
+            userMsg.textContent = input.value;
+            messages.appendChild(userMsg);
+
+            const userQuery = input.value;
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+
+            // Simulated Response (In real use, this would trigger Python)
+            setTimeout(() => {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'bubble ai';
+                aiMsg.innerHTML = "<strong>Processing with Gemini (Cached):</strong><br>I have retrieved context for your query. Results from 'all transcript.txt' suggest you are asking about corporate productivity pressure found in the 12:00-13:00 minute segment.";
+                messages.appendChild(aiMsg);
+                messages.scrollTop = messages.scrollHeight;
+            }, 600);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+================================================================================
+📖 LOSSLESS BOOK EXTRACTION — MODE A COMPATIBLE
+Source: Knowledge_Machine_v3_Canonical_Notes.pdf
+Total Pages: 2
+================================================================================
+
+
+================================================================================
+📄 PAGE 1
+================================================================================
+
+Knowledge Machine v3
+Canonical Engineering Notes & Master Constitution
+1. System Identity & Purpose
+Knowledge Machine v3 is a deterministic, offline, computer-vision-based knowledge extraction engine. It
+converts long educational videos into a minimal, information-dense set of visual states that reflect how a
+disciplined human student would take notes. It is not an AI summarizer, not an OCR-first system, and not a
+probabilistic tool. Its primary function is to fossilize human explanations into permanent, reviewable memory
+without hallucination or loss.
+2. Core Objectives Timeline
+1
+Objective 1: Zero-Loss Capture — Never miss semantic information (ACHIEVED).
+2
+Objective 2: Human-Aligned Deduplication — Reduce noise while keeping meaning (ACHIEVED).
+3
+Objective 3: Semantic Sweet Spot — No AI/OCR in decision logic (ACHIEVED).
+4
+Objective 4: Adaptive Sensitivity — Code vs theory vs talking head (ACHIEVED).
+5
+Objective 5: Offline, Free, Deterministic Operation (ACHIEVED).
+6
+Objective 6: Time Compression — Hours to minutes (ACHIEVED).
+7
+Objective 7: AI-Ready Outputs — Clean visual corpus (PARTIAL, metadata pending).
+3. Two-Phase Architecture (Locked)
+Phase separation is sacred and irreversible. Phase 1: Paranoid Capture Implemented in
+smart_frame_selector.py. Purpose: Never miss meaning. Allows noise but forbids blindness. Uses FPS
+sampling, content masking, pixel deltas, temporal plateaus, flash buffers, optical-flow scroll detection, and
+scroll latching. Phase 2: Ruthless Consolidation Implemented in screenshot_consolidator.py. Purpose:
+Remove redundancy without merging meaning. Uses SSIM ≥ 0.95, ink-density estimation, superset
+replacement rules, scroll-aware guards, and resolution safety.
+4. The Semantic Sweet Spot (Invariant)
+A frame may only replace another frame if it is provably a semantic superset. This invariant prevents loss,
+hallucination, and accidental merging. It is enforced through structural similarity, relative ink growth, and scroll
+isolation.
+5. File Map & Roles
+1
+master_pipeline.py — Orchestrator; runs the entire pipeline.
+2
+extract_all.py — Infrastructure; downloads video and prepares workspace.
+3
+smart_frame_selector.py — Phase 1 watcher; paranoid capture logic.
+4
+screenshot_consolidator.py — Phase 2 editor; semantic deduplication.
+5
+ocr_processor.py — Optional post-process indexer; never used for decisions.
+6
+Debug, safety, and legacy files — Historical and diagnostic, not production.
+
+
+
+================================================================================
+📄 PAGE 2
+================================================================================
+
+6. Known Failure Modes (Solved)
+1
+Typing ghosts → Stability plateau.
+2
+Cursor blink corruption → Relative ink margin.
+3
+Scrolling blindness → Optical flow + scroll flag.
+4
+Micro-flashes → Ring buffer capture.
+5
+UI noise → Central masking.
+6
+Over-deduplication → SSIM + ink logic.
+7. Explicitly Forbidden Actions
+OCR or AI inside capture or consolidation, lowering SSIM thresholds for technical content, merging scroll
+states, reducing resolution, guessing missing information, or skipping safety checks. Violation of these breaks
+system correctness.
+8. What Is Intentionally Missing
+Session-level metadata, timeline JSON mapping, and failure logs are not yet built. These are non-destructive
+Phase 3 extensions and do not affect capture correctness. AI is allowed only downstream of consolidation.
+9. System Contract for Downstream AI
+Downstream AI may summarize, explain, index, or structure content strictly based on visible slides. If
+information is not present, the AI must explicitly state so. Inference beyond visual evidence is forbidden.
+10. Final Assessment
+Knowledge Machine v3 is 85–90% complete. The remaining work is leverage: metadata, packaging, and
+downstream intelligence. The hard engineering problems are solved. The system is stable, finished, and
+future-proof.
+
+

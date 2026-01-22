@@ -5,10 +5,9 @@ import warnings
 # 1. Faster Startup: Ignore unnecessary warnings
 warnings.filterwarnings("ignore")
 
-# 2. Fix Windows Terminal Encoding
-if sys.platform == "win32":
-    import io
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+# if sys.platform == "win32":
+#     import io
+#     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceEmbeddings
@@ -60,7 +59,51 @@ class FreeDocumentQA:
         
         print(f"[INFO] Indexing {len(chunks)} sections from {len(documents)} document pages...")
         # Clear old and add new to avoid duplicates for the example
-        self.vector_store.add_documents(chunks)
+        # Process in batches to avoid ChromaDB limits
+        BATCH_SIZE = 5000  # Safe batch size under 5461 limit
+        print(f"[INFO] Processing {len(chunks)} chunks in batches of {BATCH_SIZE}...")
+
+        for i in range(0, len(chunks), BATCH_SIZE):
+            batch = chunks[i:i + BATCH_SIZE]
+            batch_num = (i // BATCH_SIZE) + 1
+            total_batches = (len(chunks) + BATCH_SIZE - 1) // BATCH_SIZE
+            print(f"[BATCH {batch_num}/{total_batches}] Adding {len(batch)} chunks...")
+            self.vector_store.add_documents(batch)
+            print(f"[BATCH {batch_num}/{total_batches}] ✅ Complete")
+
+        print(f"[SUCCESS] All {len(chunks)} chunks indexed!")
+        return True
+
+    def load_single_document(self, file_path):
+        """Index a single document safely with batching"""
+        if not os.path.exists(file_path):
+            return False
+            
+        print(f"[INFO] Indexing single file: {file_path}")
+        documents = []
+        try:
+            if file_path.endswith(".pdf"):
+                loader = PyPDFLoader(file_path)
+                documents.extend(loader.load())
+            elif file_path.endswith(".txt"):
+                loader = TextLoader(file_path, encoding='utf-8')
+                documents.extend(loader.load())
+        except Exception as e:
+            print(f"[ERROR] Loading file: {e}")
+            return False
+            
+        if not documents:
+            return False
+            
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=700, chunk_overlap=100)
+        chunks = text_splitter.split_documents(documents)
+        
+        BATCH_SIZE = 5000
+        for i in range(0, len(chunks), BATCH_SIZE):
+            batch = chunks[i:i + BATCH_SIZE]
+            self.vector_store.add_documents(batch)
+            
+        print(f"[SUCCESS] Indexed {len(chunks)} chunks from {file_path}")
         return True
 
     def ask_question(self, question):

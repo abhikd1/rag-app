@@ -3,8 +3,11 @@ import os
 from groq import Groq
 
 def ask_groq_to_build_translator():
-    # API Key Configuration
-    key = "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"
+    # API Key Configuration from environment variable
+    key = os.getenv("GROQ_API_KEY")
+    if not key:
+        print("GROQ_ERROR: GROQ_API_KEY environment variable not set.")
+        return
     client = Groq(api_key=key)
     
     # Prompt for Groq: Building the Hindi-to-English translation utility

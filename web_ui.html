@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 RAG Study Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 15px 30px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab:hover {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .message.user {
+            text-align: right;
+        }
+
+        .message-bubble {
+            display: inline-block;
+            padding: 15px 20px;
+            border-radius: 20px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+
+        .message.user .message-bubble {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .message.ai .message-bubble {
+            background: white;
+            border: 2px solid #e0e0e0;
+            color: #333;
+        }
+
+        .input-area {
+            display: flex;
+            padding: 20px;
+            background: white;
+            border-top: 2px solid #e0e0e0;
+            gap: 10px;
+        }
+
+        .input-area input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-area input:focus {
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .model-selector {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .model-selector label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .model-selector select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .example-card {
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .example-card:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .info-box {
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-left: 4px solid #667eea;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info-box h3 {
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+
+        .command-box {
+            background: #2d2d2d;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 RAG Study Assistant</h1>
+            <p>Multi-Modal AI-Powered Learning System</p>
+        </div>
+
+        <div class="main-content">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('chat')">💬 Chat</button>
+                <button class="tab" onclick="switchTab('commands')">⚡ Quick Commands</button>
+                <button class="tab" onclick="switchTab('modes')">🎓 Study Modes</button>
+                <button class="tab" onclick="switchTab('setup')">⚙️ Setup</button>
+            </div>
+
+            <!-- CHAT TAB -->
+            <div id="chat" class="tab-content active">
+                <div class="model-selector">
+                    <label>🧠 Select Model:</label>
+                    <select id="modelSelect">
+                        <option value="gemini">Gemini 2.5 Flash (Fast & Free) ⚡</option>
+                        <option value="groq">Groq Llama 3.3 70B (Fastest) ⚡⚡⚡</option>
+                        <option value="ollama">Ollama (Local) 🔒</option>
+                    </select>
+                </div>
+
+                <div class="chat-container">
+                    <div class="messages" id="messages">
+                        <div class="message ai">
+                            <div class="message-bubble">
+                                👋 Hi! I'm your AI study assistant. Ask me anything about your documents!
+                                <br><br>
+                                Try: "What is normalization?" or "Show me page 50"
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-area">
+                        <input type="text" id="userInput" placeholder="Ask anything about your documents..." onkeypress="handleKeyPress(event)">
+                        <button class="btn" onclick="sendMessage()">Send 🚀</button>
+                    </div>
+                </div>
+
+                <div class="examples">
+                    <div class="example-card" onclick="useExample('What is normalization?')">
+                        <strong>📚 Basic Question</strong>
+                        <p>What is normalization?</p>
+                    </div>
+                    <div class="example-card" onclick="useExample('Show me page 50')">
+                        <strong>📄 Exact Page</strong>
+                        <p>Show me page 50</p>
+                    </div>
+                    <div class="example-card" onclick="useExample('I don\\'t understand foreign keys')">
+                        <strong>🧩 Explanation</strong>
+                        <p>I don't understand foreign keys</p>
+                    </div>
+                    <div class="example-card" onclick="useExample('Test me on Chapter 3')">
+                        <strong>🧠 Self-Test</strong>
+                        <p>Test me on Chapter 3</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COMMANDS TAB -->
+            <div id="commands" class="tab-content">
+                <div class="info-box">
+                    <h3>⚡ Quick Commands to Run</h3>
+                    <p>Copy and paste these commands in your terminal to use the system:</p>
+                </div>
+
+                <h3>🚀 Start with Gemini (Recommended - Fast & Free)</h3>
+                <div class="command-box">python gemini_rag.py "What is normalization?"</div>
+
+                <h3>⚡ Start with Groq (Fastest)</h3>
+                <div class="command-box">python groq_rag.py "Explain ACID properties"</div>
+
+                <h3>🔒 Start with Ollama (Local)</h3>
+                <div class="command-box">python main.py "What is a database?"</div>
+
+                <h3>📄 Process PDF</h3>
+                <div class="command-box">python mode_a_extractor.py "documents/your_book.pdf"</div>
+
+                <h3>🎙️ Process Transcript (10-20 minutes)</h3>
+                <div class="command-box">python process_transcript_groq.py</div>
+
+                <h3>📊 View Book Index</h3>
+                <div class="command-box">python show_index.py</div>
+            </div>
+
+            <!-- STUDY MODES TAB -->
+            <div id="modes" class="tab-content">
+                <div class="info-box">
+                    <h3>🎓 5 Specialized Study Modes</h3>
+                    <p>Use these keywords in your questions to activate different modes:</p>
+                </div>
+
+                <h3>📄 MODE A: Exact Recall</h3>
+                <p><strong>Keywords:</strong> "page X", "exact text", "word for word", "verbatim"</p>
+                <p><strong>Example:</strong> "Show me page 50"</p>
+                <p><strong>Output:</strong> Exact text from the page (lossless)</p>
+                <br>
+
+                <h3>🧩 MODE B: Stuck-Point Explanation</h3>
+                <p><strong>Keywords:</strong> "I don't understand", "explain this part", "confused about"</p>
+                <p><strong>Example:</strong> "I don't understand foreign keys"</p>
+                <p><strong>Output:</strong> Surgical explanation of just that concept</p>
+                <br>
+
+                <h3>🔗 MODE C: Concept Linking</h3>
+                <p><strong>Keywords:</strong> "relate to", "connect this", "relationship between"</p>
+                <p><strong>Example:</strong> "How does ACID relate to transactions?"</p>
+                <p><strong>Output:</strong> Shows connections across the book</p>
+                <br>
+
+                <h3>🗣️ MODE D: Oral Revision</h3>
+                <p><strong>Keywords:</strong> "revise chapter", "oral revision", "read this to me"</p>
+                <p><strong>Example:</strong> "Revise chapter 2"</p>
+                <p><strong>Output:</strong> Voice-friendly revision script</p>
+                <br>
+
+                <h3>🧠 MODE E: Self-Testing</h3>
+                <p><strong>Keywords:</strong> "test me", "quiz me", "ask me questions"</p>
+                <p><strong>Example:</strong> "Test me on Chapter 3"</p>
+                <p><strong>Output:</strong> Quiz questions at 3 difficulty levels</p>
+            </div>
+
+            <!-- SETUP TAB -->
+            <div id="setup" class="tab-content">
+                <div class="info-box">
+                    <h3>⚙️ Setup Instructions</h3>
+                    <p>Follow these steps to get started:</p>
+                </div>
+
+                <h3>1️⃣ Set Gemini API Key (Recommended)</h3>
+                <div class="command-box">$env:GEMINI_API_KEY="your_key_here"</div>
+                <p>Get free key: <a href="https://aistudio.google.com/apikey" target="_blank">Google AI Studio</a></p>
+                <br>
+
+                <h3>2️⃣ Add Your Documents</h3>
+                <p>Put PDF or TXT files in the <code>documents/</code> folder</p>
+                <br>
+
+                <h3>3️⃣ Process PDFs</h3>
+                <div class="command-box">python mode_a_extractor.py "documents/your_book.pdf"</div>
+                <br>
+
+                <h3>4️⃣ Start Asking Questions!</h3>
+                <div class="command-box">python gemini_rag.py "Explain the first chapter"</div>
+                <br>
+
+                <h3>📊 System Status</h3>
+                <p>✅ Gemini: Fast & Free (Recommended)</p>
+                <p>✅ Groq: Fastest (Free)</p>
+                <p>⚠️ Ollama: Requires local installation</p>
+                <br>
+
+                <h3>💡 Pro Tips</h3>
+                <ul>
+                    <li>Use <strong>Gemini</strong> for best balance of speed and quality</li>
+                    <li>Use <strong>Groq</strong> when you need fastest responses</li>
+                    <li>Upload PDFs to automatically extract and index them</li>
+                    <li>Try different study modes for different learning needs</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Remove active from all tab buttons
+            const tabButtons = document.querySelectorAll('.tab');
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Mark button as active
+            event.target.classList.add('active');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+
+            // Clear input
+            input.value = '';
+
+            // Show loading
+            const loadingId = addMessage('<div class="loading"></div> Thinking...', 'ai');
+
+            // Simulate AI response (in real app, this would call your Python backend)
+            setTimeout(() => {
+                removeMessage(loadingId);
+                const model = document.getElementById('modelSelect').value;
+                const response = getSimulatedResponse(message, model);
+                addMessage(response, 'ai');
+            }, 1500);
+        }
+
+        function addMessage(text, type) {
+            const messagesDiv = document.getElementById('messages');
+            const messageId = 'msg-' + Date.now();
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.id = messageId;
+            messageDiv.innerHTML = `<div class="message-bubble">${text}</div>`;
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            return messageId;
+        }
+
+        function removeMessage(messageId) {
+            const msg = document.getElementById(messageId);
+            if (msg) msg.remove();
+        }
+
+        function getSimulatedResponse(message, model) {
+            // This is a demo response. In real app, this would call your Python backend
+            return `
+                <strong>🤖 ${model.toUpperCase()} Response:</strong><br><br>
+                To get real AI responses, run the Python scripts in your terminal:<br><br>
+                <code>python gemini_rag.py "${message}"</code><br><br>
+                Or<br><br>
+                <code>python groq_rag.py "${message}"</code><br><br>
+                This HTML interface is a visual guide. The actual AI processing happens in the Python scripts! 🚀
+            `;
+        }
+
+        function useExample(text) {
+            document.getElementById('userInput').value = text;
+            sendMessage();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>

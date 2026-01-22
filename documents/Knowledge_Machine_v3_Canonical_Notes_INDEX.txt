@@ -1,0 +1,16 @@
+================================================================================
+📑 BOOK INDEX — HEADINGS & PAGE MAPPING
+Source: Knowledge_Machine_v3_Canonical_Notes.pdf
+Total Headings Detected: 10
+================================================================================
+
+  → 1. System Identity & Purpose (Page 1)
+  → 2. Core Objectives Timeline (Page 1)
+  → 3. Two-Phase Architecture (Locked) (Page 1)
+  → 4. The Semantic Sweet Spot (Invariant) (Page 1)
+  → 5. File Map & Roles (Page 1)
+  → 6. Known Failure Modes (Solved) (Page 2)
+  → 7. Explicitly Forbidden Actions (Page 2)
+  → 8. What Is Intentionally Missing (Page 2)
+  → 9. System Contract for Downstream AI (Page 2)
+  → 10. Final Assessment (Page 2)
