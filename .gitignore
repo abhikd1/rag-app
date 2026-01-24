@@ -25,11 +25,21 @@ __pycache__/
 *.db
 
 # ============================================
-# SECRETS
+# SECRETS (NEVER COMMIT API KEYS!)
 # ============================================
 .env
 *.key
 secrets.txt
+
+# ============================================
+# TEST FILES (May contain API responses)
+# ============================================
+*_test.txt
+groq_test.txt
+gemini_response.txt
+multi_test.txt
+test_response.json
+last_answer.md
 
 # ============================================
 # LOGS & TEMP FILES

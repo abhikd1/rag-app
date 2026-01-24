@@ -108,6 +108,11 @@ class GroqRAG:
                         }
                     ))
         
+        # ✅ CRITICAL: Check if we have chunks before creating vectorstore
+        if not all_chunks:
+            print(f"❌ CRITICAL ERROR: No content extracted from {pdf_name}")
+            return False
+            
         print(f"📊 [GROQ] Created {len(all_chunks)} chunks")
         
         # Delete old vector store
@@ -129,41 +134,40 @@ class GroqRAG:
         
         return True
 
-    def _get_full_page_from_raw_file(self, page_num):
-        """Directly extract a full page from the RAW_TEXT file for 100% accuracy"""
-        try:
-            if not self.current_file: return None
+    def get_page_content(self, page_num):
+        """FIXED: Get exact content from RAW_TEXT file, not vectorstore"""
+        if self.current_file:
+            docs_folder = Path("documents")
             base_name = Path(self.current_file).stem
-            raw_file = f"documents/{base_name}_RAW_TEXT.txt"
+            raw_file = docs_folder / f"{base_name}_RAW_TEXT.txt"
             
-            if not Path(raw_file).exists(): return None
-            
-            with open(raw_file, 'r', encoding='utf-8') as f:
-                content = f.read()
-            
-            # Find page markers
-            page_start = f"=== PAGE {page_num} ==="
-            page_end = f"=== PAGE {page_num + 1} ==="
-            
-            start_idx = content.find(page_start)
-            if start_idx == -1: return None
-            
-            end_idx = content.find(page_end)
-            
-            if end_idx == -1:
-                page_content = content[start_idx:]
-            else:
-                page_content = content[start_idx:end_idx]
-            
-            # Cleanup
-            page_content = page_content.replace(page_start, '').strip()
-            page_content = re.sub(r'={3,}', '', page_content).strip()
-            
-            return page_content
-            
-        except Exception as e:
-            print(f"Error reading page {page_num}: {e}")
-            return None
+            if raw_file.exists():
+                try:
+                    with open(raw_file, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                    
+                    # Find this page's markers
+                    start_marker = f"=== PAGE {page_num} ==="
+                    next_page_marker = f"=== PAGE {page_num + 1} ==="
+                    
+                    start_idx = content.find(start_marker)
+                    if start_idx == -1: return None
+                    
+                    # Move past the marker line
+                    start_idx = content.find('\n', start_idx) + 1
+                    
+                    # Find where this page ends
+                    end_idx = content.find(next_page_marker, start_idx)
+                    if end_idx == -1:
+                        page_content = content[start_idx:].strip()
+                    else:
+                        page_content = content[start_idx:end_idx].strip()
+                    
+                    # Remove ONLY big separator bars
+                    page_content = re.sub(r'^={15,}.*$', '', page_content, flags=re.MULTILINE).strip()
+                    return page_content if len(page_content) > 10 else None
+                except: return None
+        return None
 
     def _find_pages_with_section(self, section_num):
         """Find all pages that contain a specific section number"""
@@ -250,7 +254,7 @@ class GroqRAG:
         page_match = re.search(r'page\s+(\d+)', query.lower())
         if page_match:
             page_num = int(page_match.group(1))
-            page_content = self._get_full_page_from_raw_file(page_num)
+            page_content = self.get_page_content(page_num)
             if not page_content:
                 return f"❌ Could not find content for page {page_num}"
             return self._format_raw_content(page_content, page_num)
@@ -263,7 +267,7 @@ class GroqRAG:
             if pages:
                 results = f"# 📖 RAW CONTENT - Section {section_num}\n\n"
                 for p in pages:
-                    p_cont = self._get_full_page_from_raw_file(p)
+                    p_cont = self.get_page_content(p)
                     if p_cont:
                         results += self._format_raw_content(p_cont, p) + "\n\n"
                 return results
@@ -350,24 +354,22 @@ CONTENT SNIPPET:
         page_match = re.search(r'page\s+(\d+)', question.lower())
         if page_match:
             page_num = int(page_match.group(1))
-            print(f"🔍 [GROQ] Targeted Page {page_num}")
-            page_content = self._get_full_page_from_raw_file(page_num)
+            print(f"📄 [GROQ] Handling PAGE {page_num} query")
+            page_content = self.get_page_content(page_num)
             
             if not page_content:
-                return f"❌ Could not find specific content for page {page_num}."
+                return f"❌ Page {page_num} not found or empty."
             
-            if is_raw_mode:
-                return self._format_raw_content(page_content, page_num)
+            if is_raw_mode: return self._format_raw_content(page_content, page_num)
             
-            system_prompt = f"""You are a highly engaging educational AI tutor.
-Document: {self.current_file}
-Page: {page_num}
-
-Goal: Explain this page in a ChatGPT/DeepSeek style. 
-- Use rich formatting, bullet points, and tables.
-- Cover EVERY detail from the text.
-- Be accurate and engaging."""
-            user_content = f"📖 **CONTENT FROM PAGE {page_num}:**\n{page_content}\n\nQuestion: {question}"
+            # EXPLAIN MODE
+            from chatgpt_prompt_template import get_page_explanation_prompt
+            system_prompt = "You are a strict anti-hallucination educational AI tutor."
+            user_content = get_page_explanation_prompt(
+                page_num=page_num,
+                page_content=page_content,
+                filename=self.current_file or "document"
+            )
 
         else:
             # SECTION DETECT
@@ -380,13 +382,13 @@ Goal: Explain this page in a ChatGPT/DeepSeek style.
                 if pages:
                     full_content = ""
                     for p in pages:
-                        p_cont = self._get_full_page_from_raw_file(p)
+                        p_cont = self.get_page_content(p)
                         if p_cont: full_content += f"\n\n--- PAGE {p} ---\n\n{p_cont}"
                     
                     if is_raw_mode:
                         res = f"# 📖 RAW CONTENT - Section {section_num}\n\n"
                         for p in pages:
-                            res += self._format_raw_content(self._get_full_page_from_raw_file(p), p) + "\n\n"
+                            res += self._format_raw_content(self.get_page_content(p), p) + "\n\n"
                         return res
                     
                     system_prompt = "You are an educational AI tutor. Explain the following section content accurately and thoroughly."
@@ -423,6 +425,37 @@ Goal: Explain this page in a ChatGPT/DeepSeek style.
             return completion.choices[0].message.content
         except Exception as e:
             return f"❌ Groq Error: {str(e)}"
+
+    def get_page_content(self, page_num):
+        """FIXED: Get exact content from RAW_TEXT file"""
+        if self.current_file:
+            docs_folder = Path("documents")
+            base_name = Path(self.current_file).stem
+            raw_file = docs_folder / f"{base_name}_RAW_TEXT.txt"
+            
+            if raw_file.exists():
+                try:
+                    with open(raw_file, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                    
+                    start_marker = f"=== PAGE {page_num} ==="
+                    next_page_marker = f"=== PAGE {page_num + 1} ==="
+                    
+                    start_idx = content.find(start_marker)
+                    if start_idx == -1: return None
+                    
+                    start_idx = content.find('\n', start_idx) + 1
+                    end_idx = content.find(next_page_marker, start_idx)
+                    
+                    if end_idx == -1:
+                        page_content = content[start_idx:].strip()
+                    else:
+                        page_content = content[start_idx:end_idx].strip()
+                        
+                    page_content = re.sub(r'={60,}\n?', '', page_content).strip()
+                    return page_content if len(page_content) > 10 else None
+                except: return None
+        return None
 
     def get_document_index(self):
         """Get the complete hierarchical topic-wise index for current document"""

@@ -196,30 +196,22 @@ class IndexGenerator:
                 else:
                     page_content = content[start_idx:end_idx]
                 
-                # Clean page content
-                page_content = page_content.replace(page_marker_start, '')
-                page_content = re.sub(r'={3,}', '', page_content)
-                page_content = page_content.strip()
+                # CRITICAL FIX: Remove ONLY big separator bars, keep everything else
+                clean_content = re.sub(r'^={15,}.*$', '', page_content, flags=re.MULTILINE).strip()
+                clean_content = re.sub(r'\n\s*\n', '\n', clean_content).strip()
                 
-                # Extract section headings
-                section_pattern = r'(\d+\.\d+(?:\.\d+)?)\s+([A-Z][^\n]{5,70})'
-                sections_on_page = re.findall(section_pattern, page_content)
-                
-                if sections_on_page:
-                    # Use first section found
-                    section_num, section_title = sections_on_page[0]
-                    summary = f"{section_num} {section_title}"[:60]
-                else:
-                    # No section heading - extract first meaningful content
-                    lines = [l.strip() for l in page_content.split('\n') if l.strip()]
+                if clean_content and len(clean_content) > 10:
+                    # Has real content - extract first meaningful line
+                    lines = [l.strip() for l in clean_content.split('\n') 
+                            if l.strip() and len(l.strip()) > 5]
                     
-                    # Filter out empty lines and page markers
-                    meaningful_lines = [l for l in lines if len(l) > 10 and '===' not in l]
-                    
-                    if meaningful_lines:
-                        summary = meaningful_lines[0][:60]
+                    if lines:
+                        summary = lines[0][:100]
                     else:
-                        summary = "Continued content"
+                        summary = "(Content available - no clear heading)"
+                else:
+                    # Empty page - mark clearly
+                    summary = "============================================================"
                 
                 summaries.append({
                     'page': page_num,
@@ -234,10 +226,14 @@ class IndexGenerator:
             table += "|------|------------------|\n"
             
             for item in summaries:
-                # Clean summary (remove any remaining markers)
-                clean_summary = item['summary'].replace('=', '').strip()
-                if not clean_summary or clean_summary == '':
-                    clean_summary = "Continued content"
+                summary_text = item['summary']
+                # Only clean if it's NOT the empty page marker
+                if "======" not in summary_text:
+                    clean_summary = summary_text.replace('=', '').strip()
+                    if not clean_summary:
+                        clean_summary = "Continued content"
+                else:
+                    clean_summary = summary_text
                 
                 table += f"| {item['page']} | {clean_summary} |\n"
             

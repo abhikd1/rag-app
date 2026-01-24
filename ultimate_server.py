@@ -13,9 +13,21 @@ from datetime import datetime
 from pathlib import Path
 import traceback
 
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+    print("✅ Loaded .env file")
+except ImportError:
+    print("⚠️  python-dotenv not installed, using system environment variables only")
+except Exception as e:
+    print(f"⚠️  Could not load .env: {e}")
+
 # Import RAG
 try:
     from gemini_rag import GeminiRAG
+    import gemini_rag, inspect
+    print(f"✅ Loaded GeminiRAG from: {inspect.getfile(gemini_rag)}")
     GEMINI_OK = True
 except Exception as e:
     print(f"[WARN] Gemini: {e}")
@@ -23,6 +35,8 @@ except Exception as e:
 
 try:
     from groq_rag import GroqRAG
+    import groq_rag, inspect
+    print(f"✅ Loaded GroqRAG from: {inspect.getfile(groq_rag)}")
     GROQ_OK = True
 except Exception as e:
     print(f"[WARN] Groq: {e}")
@@ -125,97 +139,89 @@ def home():
 
 @app.route('/api/upload', methods=['POST'])
 def upload():
-    """Handle file upload"""
+    """Handle file upload and load into RAG"""
     if 'file' not in request.files:
-        return jsonify({'error': 'No file'}), 400
+        return jsonify({'error': 'No file part'}), 400
     
     file = request.files['file']
     if not file.filename:
-        return jsonify({'error': 'No filename'}), 400
+        return jsonify({'error': 'No selected file'}), 400
     
     try:
         # Save file
         docs_dir = Path('documents')
         docs_dir.mkdir(exist_ok=True)
         filepath = docs_dir / file.filename
-        file.save(filepath)
+        file.save(str(filepath))
         
         print(f"\n{'='*60}")
-        print(f"📄 UPLOADED: {file.filename}")
+        print(f"📄 UPLOADED & PROCESSING: {file.filename}")
         print(f"{'='*60}")
         
-        # Process PDF
+        # Extract content first (to ensure RAW_TEXT exists)
         if filepath.suffix.lower() == '.pdf':
-            try:
-                from mode_a_extractor import extract_with_headings
-                
-                print(f"📊 Extracting with page markers...")
-                extract_with_headings(str(filepath))
-                print(f"✅ Extraction complete")
-                
-                # RELOAD RAG WITH ONLY THIS FILE
-                print(f"\n{'='*60}")
-                print(f"🔄 LOADING INTO RAG...")
-                print(f"{'='*60}")
-                
-                # Clear cache
-                global response_cache
-                response_cache.clear()
-                print("✅ Cache cleared")
-                
-                # Reload Gemini with only this file
-                if 'gemini' in active_models:
-                    success = active_models['gemini'].load_specific_file(file.filename)
-                    if not success:
-                        return jsonify({
-                            'success': False,
-                            'error': 'Failed to load into RAG'
-                        }), 500
-                
-                # Reload Groq with only this file (if you have groq_rag.py updated similarly)
-                if 'groq' in active_models:
-                    try:
-                        active_models['groq'].load_specific_file(file.filename)
-                    except:
-                        pass  # Groq might not have this method yet
-                
-                print(f"{'='*60}\n")
-                
-                # Initialize tracker if it exists
-                try:
-                    from progress_tracker import StudyProgressTracker
-                    tracker = StudyProgressTracker()
-                    tracker.add_document(file.filename, 'pdf')
-                except:
-                    pass
-                
-                return jsonify({
-                    'success': True,
-                    'processed': True,
-                    'file': file.filename,
-                    'message': f'✅ {file.filename} indexed! Now the ONLY searchable file.',
-                    'vector_reload_complete': True
-                })
-                
-            except Exception as e:
-                print(f"❌ Error: {e}")
-                import traceback
-                traceback.print_exc()
-                return jsonify({
-                    'success': False,
-                    'error': str(e)
-                }), 500
-        else:
-            # Non-PDF file
+            from mode_a_extractor import extract_with_headings
+            extract_with_headings(str(filepath))
+            
+            # Load into RAG models
+            for name, model in active_models.items():
+                print(f"🔄 Loading {file.filename} into {name} model...")
+                model.load_specific_file(file.filename)
+            
+            global last_uploaded_file
+            last_uploaded_file = file.filename
+            
             return jsonify({
                 'success': True,
-                'processed': False,
+                'status': 'success',
                 'file': file.filename,
-                'message': 'Only PDF files are processed'
+                'message': f'✅ {file.filename} uploaded and indexed!'
             })
-    
+        else:
+            return jsonify({'error': 'Only PDF files supported for RAG'}), 400
+            
     except Exception as e:
         print(f"❌ Upload error: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/analyze', methods=['POST'])
+def analyze_existing():
+    """Re-analyze an already uploaded PDF"""
+    global last_uploaded_file
+    try:
+        data = request.get_json()
+        filename = data.get('filename')
+        
+        if not filename:
+            return jsonify({'error': 'No filename provided'}), 400
+            
+        docs_dir = Path('documents')
+        filepath = docs_dir / filename
+        
+        if not filepath.exists():
+            return jsonify({'error': f'File {filename} not found on server'}), 404
+            
+        # Ensure extraction has happened
+        from mode_a_extractor import extract_with_headings
+        extract_with_headings(str(filepath))
+        
+        # Load into RAG models
+        for name, model in active_models.items():
+            print(f"🔄 Re-analyzing {filename} in {name} model...")
+            model.load_specific_file(filename)
+            
+        last_uploaded_file = filename
+        
+        return jsonify({
+            'success': True,
+            'status': 'success',
+            'filename': filename,
+            'message': f'✅ {filename} analyzed successfully!'
+        })
+    except Exception as e:
+        print(f"❌ Analyze error: {e}")
         return jsonify({'error': str(e)}), 500
 
 
@@ -275,6 +281,32 @@ def get_page_summary():
         }), 500
 
 
+@app.route('/api/page-raw', methods=['GET'])
+def get_page_raw():
+    """Get raw text content for a specific page"""
+    global active_models
+    try:
+        page_num = request.args.get('page', type=int)
+        if not page_num:
+            return jsonify({'success': False, 'error': 'Page number required'}), 400
+            
+        model = active_models.get('gemini') or active_models.get('groq')
+        if not model:
+            return jsonify({'success': False, 'error': 'No document loaded'}), 400
+            
+        content = model.get_page_content(page_num)
+        if not content:
+            return jsonify({
+                'success': True, 
+                'content': '❌ Page appears empty or not found in the raw text file.'
+            })
+            
+        return jsonify({
+            'success': True,
+            'content': content
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
 @app.route('/api/chat', methods=['POST'])
 def chat():
     """Chat with file-specific context"""
@@ -285,15 +317,23 @@ def chat():
     
     if not question:
         return jsonify({'error': 'No message'}), 400
-    # PREER GROQ (no quota limits!) if available, otherwise use requested model
-    model = data.get('model', 'gemini')
     
-    # Get RAG model
+    # PREFER GROQ (10x higher quota, blazing fast!) if available
+    model = data.get('model', 'groq')  # Changed default from 'gemini' to 'groq'
+    
+    # Get RAG model with intelligent fallback
     rag = active_models.get(model)
     if not rag:
-        # Final fallback
-        model = next(iter(active_models.keys())) if active_models else None
-        rag = active_models.get(model) if model else None
+        # Fallback priority: groq > gemini
+        if 'groq' in active_models:
+            model = 'groq'
+            rag = active_models['groq']
+        elif 'gemini' in active_models:
+            model = 'gemini'
+            rag = active_models['gemini']
+        else:
+            model = next(iter(active_models.keys())) if active_models else None
+            rag = active_models.get(model) if model else None
         
     if not rag:
         return jsonify({'error': f'No models available'}), 500
